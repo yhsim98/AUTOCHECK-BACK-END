@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.auto.check.mapper.LectureMapper">
+
+    <select id="getLectureInfoList" resultType="com.auto.check.domain.Lecture">
+        SELECT li.id, li.lecture_id, li.lecture_room, li.day_of_week, li.lecture_start, li.lecture_end
+        FROM lecture_info li
+        WHERE li.lecture_id IN(SELECT r.lecture_id FROM registration r WHERE r.user_id=#{lectureId})
+    </select>
+
+
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.auto.check.mapper.AttendanceMapper">
+
+    <update id="alterStudentAttendance">
+        UPDATE attendance
+        SET
+            is_attend=1
+        WHERE lecture_id=#{lecture_id} AND user_id=#{user_id}
+    </update>
+
+    <select id="getStudentLectureAttendanceList" resultType="com.auto.check.domain.Attendance">
+        SELECT a.id, a.user_id, a.week, a.created_at, a.modified_at, a.is_attend
+        FROM attendance a
+        WHERE a.lecture_info_id IN(SELECT l.id FROM lecture_info l WHERE l.lecture_id=#{lectureId}) AND a.user_id=#{userId}
+    </select>
+</mapper>
