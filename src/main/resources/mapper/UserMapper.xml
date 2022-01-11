@@ -7,6 +7,19 @@
     </select>
 
     <select id="getUserById" resultType="com.auto.check.domain.User">
-        SELECT id, account, name, number, user_type FROM user WHERE id=#{id}
+        SELECT id, account, name, school_number, user_type FROM user WHERE id=#{id}
     </select>
+
+    <select id="getUserByNumber" resultType="com.auto.check.domain.User">
+        SELECT id, account, name, school_number, user_type FROM user WHERE school_number=#{schoolNumber}
+    </select>
+
+    <select id="getUserByAccount" resultType="com.auto.check.domain.User">
+        SELECT id, account, name, school_number, user_type FROM user WHERE account=#{account}
+    </select>
+
+    <insert id="insertUser">
+        insert into user(account, password, name, school_number, user_type)
+        values(#{account}, #{password}, #{name}, #{school_number}, #{user_type});
+    </insert>
 </mapper>

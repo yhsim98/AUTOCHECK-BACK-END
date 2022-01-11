@@ -12,7 +12,8 @@ import java.sql.Timestamp;
 public class Attendance {
     private Long id;
     private Long user_id;
-    private String week;
+    private int week;
+    private String day_of_week;
     private Long lecture_info_id;
     private Short is_attend;
     private Timestamp created_at;

@@ -6,14 +6,11 @@ import lombok.Setter;
 
 import java.sql.Time;
 
-@Getter
-@Setter
+@Getter @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Lecture {
+public class LectureInfo {
     private Long id;
     private Long lecture_id;
-    private Long lecture_info_id;
-    private String lecture_name;
     private String lecture_room;
     private String cctv_ip;
     private String day_of_week;

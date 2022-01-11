@@ -1,6 +1,8 @@
 package com.auto.check.domain;
 
+import com.auto.check.enums.UserType;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +14,8 @@ public class User {
     private String account;
     private String password;
     private String name;
-    private Long number;
-    private Short is_attend;
+    private String school_number;
+    @ApiModelProperty(hidden = true)
     private String img_path;
+    private UserType user_type;
 }

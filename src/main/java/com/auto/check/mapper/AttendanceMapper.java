@@ -9,4 +9,5 @@ import java.util.List;
 public interface AttendanceMapper {
     void alterStudentAttendance();
     List<Attendance> getStudentLectureAttendanceList(Long lectureId, Long userId);
+    void insertAttendance(Attendance attendance);
 }

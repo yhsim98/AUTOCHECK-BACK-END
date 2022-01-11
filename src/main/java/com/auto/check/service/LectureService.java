@@ -8,4 +8,5 @@ import java.util.List;
 public interface LectureService {
     List<Lecture> getLectureList();
     List<Attendance> getLectureStudent(Long lectureId);
+    void singUpClass(Long lectureId);
 }

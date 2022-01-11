@@ -10,8 +10,14 @@
     </update>
 
     <select id="getStudentLectureAttendanceList" resultType="com.auto.check.domain.Attendance">
-        SELECT a.id, a.user_id, a.week, a.created_at, a.modified_at, a.is_attend
+        SELECT a.id, a.is_attend, a.user_id, a.week, li.day_of_week, li.lecture_start, li.lecture_end
         FROM attendance a
-        WHERE a.lecture_info_id IN(SELECT l.id FROM lecture_info l WHERE l.lecture_id=#{lectureId}) AND a.user_id=#{userId}
+        JOIN lecture_info li ON li.id=a.lecture_info_id
+        WHERE li.lecture_id=#{lectureId} AND a.user_id=#{userId}
     </select>
+
+    <insert id="insertAttendance">
+        INSERT INTO attendance(user_id, week, lecture_info_id, created_at, modified_at, is_attend)
+        VALUES(#{user_id}, #{week}, #{lecture_info_id}, default, default, 0);
+    </insert>
 </mapper>

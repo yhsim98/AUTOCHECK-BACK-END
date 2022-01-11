@@ -1,5 +1,8 @@
 package com.auto.check.util;
 
+import com.auto.check.enums.ErrorMessage;
+import com.auto.check.enums.UserType;
+import com.auto.check.exception.NonCriticalException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -27,6 +30,7 @@ public class Jwt {
 
         Map<String, Object> payloads = new HashMap<>();
         payloads.put("id", id );
+        //payloads.put("sub", userType.name());
         Calendar calendar = Calendar.getInstance(); // singleton object java calendar
         calendar.setTime(new Date());
         calendar.add(Calendar.HOUR_OF_DAY, 24); // access token expire 24h later
@@ -37,8 +41,8 @@ public class Jwt {
 
     public boolean isValid(String token){
 
-        //if(token == null) throw new Exception(ErrorMessage.JWT_NOT_EXIST);
-        //if(!token.startsWith("Bearer ")) throw new Exception(ErrorMessage.JWT_NOT_START_BEARER);
+        if(token == null) throw new NonCriticalException(ErrorMessage.JWT_NOT_EXIST);
+        if(!token.startsWith("Bearer ")) throw new NonCriticalException(ErrorMessage.JWT_NOT_START_BEARER);
 
         Claims claims = this.getClaimsFromJwtToken(token);
 
@@ -59,9 +63,9 @@ public class Jwt {
                     .getBody();
 
         } catch(ExpiredJwtException e){
-
+            throw new NonCriticalException(ErrorMessage.TOKEN_EXPIRED_EXCEPTION);
         } catch(Exception e){
-
+            throw new NonCriticalException(ErrorMessage.TOKEN_INVALID_EXCEPTION);
         }
 
         return claims;

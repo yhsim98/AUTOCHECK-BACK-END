@@ -8,4 +8,7 @@ import java.util.List;
 @Repository
 public interface LectureMapper {
     List<Lecture> getLectureInfoList(Long userId);
+    void insertRegistration(Long userId, Long lectureId);
+    List<Lecture> getLectureInfoListByLectureId(Long lectureId);
+    int getRegistrationNumByUserIdAndLectureId(Long userId, Long lectureId);
 }

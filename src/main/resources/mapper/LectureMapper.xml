@@ -3,10 +3,22 @@
 <mapper namespace="com.auto.check.mapper.LectureMapper">
 
     <select id="getLectureInfoList" resultType="com.auto.check.domain.Lecture">
-        SELECT li.id, li.lecture_id, li.lecture_room, li.day_of_week, li.lecture_start, li.lecture_end
+        SELECT li.id, l.lecture_name, li.lecture_id, li.lecture_room, li.day_of_week, li.lecture_start, li.lecture_end
         FROM lecture_info li
-        WHERE li.lecture_id IN(SELECT r.lecture_id FROM registration r WHERE r.user_id=#{lectureId})
+        JOIN lecture l ON l.id=li.lecture_id
+        WHERE l.id IN(SELECT r.lecture_id FROM registration r WHERE r.user_id=#{user_id})
     </select>
 
+    <select id="getLectureInfoListByLectureId" resultType="com.auto.check.domain.Lecture">
+        SELECT id as lecture_info_id FROM lecture_info WHERE lecture_id = #{lectureId}
+    </select>
+
+    <select id="getRegistrationNumByUserIdAndLectureId" resultType="Integer">
+        SELECT COUNT(*) FROM registration WHERE user_id=#{userId} AND lecture_id=#{lectureId}
+    </select>
+
+    <insert id="insertRegistration">
+        INSERT INTO registration(user_id, lecture_id) values(#{userId}, #{lectureId});
+    </insert>
 
 </mapper>
