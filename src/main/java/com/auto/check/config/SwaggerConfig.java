@@ -36,7 +36,7 @@ public class SwaggerConfig {
                 .groupName(version)
                 .select()
                 .apis(RequestHandlerSelectors.
-                        basePackage("com.auto.check.controller"))
+                        basePackage("com.auto.check.web"))
                 .paths(Predicates.or(PathSelectors.regex("^(?!/v2).+"))).build().
                 securitySchemes(apiKey());
     }
@@ -50,7 +50,7 @@ public class SwaggerConfig {
                 .groupName(version)
                 .select()
                 .apis(RequestHandlerSelectors.
-                        basePackage("com.auto.check.controller"))
+                        basePackage("com.auto.check.web"))
                 .paths(Predicates.or(PathSelectors.regex("^(?!/v1).+"))).build().
                 securitySchemes(apiKey());
     }

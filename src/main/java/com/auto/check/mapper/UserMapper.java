@@ -1,6 +1,6 @@
 package com.auto.check.mapper;
 
-import com.auto.check.domain.User;
+import com.auto.check.domain.user.User;
 
 public interface UserMapper {
     User getUserById(Long id);

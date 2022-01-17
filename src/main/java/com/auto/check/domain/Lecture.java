@@ -1,22 +1,43 @@
 package com.auto.check.domain;
 
+import com.auto.check.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Time;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
-@Setter
+@Entity
+@Table(name="lecture")
+@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Lecture {
+public class Lecture extends DefaultEntity{
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long lecture_id;
-    private Long lecture_info_id;
-    private String lecture_name;
-    private String lecture_room;
-    private String cctv_ip;
-    private String day_of_week;
-    private Time lecture_start;
-    private Time lecture_end;
+
+    @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ApiModelProperty(hidden = true)
+    private List<LectureInfo> lectureInfoList = new ArrayList<>();
+
+    @Column(name = "lecture_name")
+    private String lectureName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="professor_id")
+    private User professor;
+
+    private String semester;
+
+    @Builder
+    public Lecture(String lectureName, User professor, String semester) {
+        this.lectureName = lectureName;
+        this.professor = professor;
+        this.semester = semester;
+    }
 }

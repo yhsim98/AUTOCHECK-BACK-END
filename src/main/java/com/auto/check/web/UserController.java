@@ -1,7 +1,9 @@
-package com.auto.check.controller;
+package com.auto.check.web;
 
-import com.auto.check.domain.User;
+import com.auto.check.config.ResponseData;
+import com.auto.check.domain.user.User;
 import com.auto.check.service.UserService;
+import com.auto.check.web.dto.UserLoginRequestDTO;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
@@ -18,21 +20,21 @@ public class UserController {
 
     @PostMapping("/login")
     @ApiOperation(value="로그인 요청", notes="로그인 요청하는 api, 문제없다면 token 반환")
-    public ResponseEntity userLogin(@RequestBody User user){
-        return new ResponseEntity(userService.userLogin(user), HttpStatus.OK);
+    public ResponseEntity userLogin(@RequestBody UserLoginRequestDTO requestDTO){
+        return new ResponseEntity(ResponseData.of(userService.userLogin(requestDTO), HttpStatus.OK), HttpStatus.OK);
     }
 
     @GetMapping("/me")
     @ApiOperation(value="회원 정보 API", notes="회원 정보를 가져오는 API", authorizations = @Authorization(value = "Bearer +accessToken"))
     public ResponseEntity getLoginUserInfo(){
-        return new ResponseEntity(userService.getLoginUserInfo(), HttpStatus.OK);
+        return new ResponseEntity(ResponseData.of(userService.getLoginUserInfo(), HttpStatus.OK), HttpStatus.OK);
     }
 
     @PostMapping("/sing-in")
     @ApiOperation(value = "회원가입 API", notes="유저회원가입 API 입니다. ")
     public ResponseEntity singIn(@RequestBody User user){
         userService.singInUser(user);
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity(ResponseData.of(HttpStatus.OK), HttpStatus.CREATED);
     }
 
 }

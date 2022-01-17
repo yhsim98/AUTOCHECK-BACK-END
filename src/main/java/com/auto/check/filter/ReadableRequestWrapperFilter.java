@@ -2,7 +2,6 @@ package com.auto.check.filter;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.entity.ContentType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -67,10 +66,10 @@ public class ReadableRequestWrapperFilter implements Filter {
                 if (StringUtils.isEmpty(collect)) { // body 가 없을경우 로깅 제외
                     return;
                 }
-                if (request.getContentType() != null && request.getContentType().contains(
-                        ContentType.MULTIPART_FORM_DATA.getMimeType())) { // 파일 업로드시 로깅제외
-                    return;
-                }
+//                if (request.getContentType() != null && request.getContentType().contains(
+//                        ContentType.MULTIPART_FORM_DATA.getMimeType())) { // 파일 업로드시 로깅제외
+//                    return;
+//                }
                 JSONParser jsonParser = new JSONParser();
                 Object parse = jsonParser.parse(collect);
                 if (parse instanceof JSONArray) {

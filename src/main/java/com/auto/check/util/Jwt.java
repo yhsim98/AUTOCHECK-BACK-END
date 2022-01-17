@@ -1,7 +1,7 @@
 package com.auto.check.util;
 
 import com.auto.check.enums.ErrorMessage;
-import com.auto.check.enums.UserType;
+import com.auto.check.domain.user.UserType;
 import com.auto.check.exception.NonCriticalException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -10,10 +10,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class Jwt {
@@ -21,8 +18,7 @@ public class Jwt {
     @Value("${spring.jwt.secret}")
     private String key;
 
-
-    public String generateToken(Long id){
+    public String generateToken(Long id, UserType userType){
 
         Map<String, Object> headers = new HashMap<>();
         headers.put("typ", "JWT");
@@ -30,13 +26,15 @@ public class Jwt {
 
         Map<String, Object> payloads = new HashMap<>();
         payloads.put("id", id );
-        //payloads.put("sub", userType.name());
-        Calendar calendar = Calendar.getInstance(); // singleton object java calendar
-        calendar.setTime(new Date());
-        calendar.add(Calendar.HOUR_OF_DAY, 24); // access token expire 24h later
-        Date exp = calendar.getTime();
+        payloads.put("aud", userType.name());
 
-        return Jwts.builder().setHeader(headers).setClaims(payloads).setExpiration(exp).signWith(SignatureAlgorithm.HS256, key.getBytes()).compact();
+        // 토큰 유효기간 설정
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+
+        calendar.add(Calendar.YEAR, 1);
+
+        return Jwts.builder().setHeader(headers).setClaims(payloads).setExpiration(calendar.getTime()).signWith(SignatureAlgorithm.HS256, key.getBytes()).compact();
     }
 
     public boolean isValid(String token){
@@ -44,14 +42,21 @@ public class Jwt {
         if(token == null) throw new NonCriticalException(ErrorMessage.JWT_NOT_EXIST);
         if(!token.startsWith("Bearer ")) throw new NonCriticalException(ErrorMessage.JWT_NOT_START_BEARER);
 
-        Claims claims = this.getClaimsFromJwtToken(token);
+        Claims claims = this.parseClaimsFromJwt(token);
 
-        String sub = String.valueOf(claims.get("sub"));
+        if(claims.get("id") == null || claims.get("exp") == null || claims.get("aud") == null){
+            throw new NonCriticalException(ErrorMessage.TOKEN_INVALID_EXCEPTION);
+        }
 
         return true;
     }
 
-    public Claims getClaimsFromJwtToken(String token){
+    public Claims getClaimsFromJwt(String token){
+        isValid(token);
+        return parseClaimsFromJwt(token);
+    }
+
+    private Claims parseClaimsFromJwt(String token){
         //System.out.println(token);
         Claims claims = null;
         token = token.substring(7);
@@ -64,6 +69,7 @@ public class Jwt {
 
         } catch(ExpiredJwtException e){
             throw new NonCriticalException(ErrorMessage.TOKEN_EXPIRED_EXCEPTION);
+
         } catch(Exception e){
             throw new NonCriticalException(ErrorMessage.TOKEN_INVALID_EXCEPTION);
         }

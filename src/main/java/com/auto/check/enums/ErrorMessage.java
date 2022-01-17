@@ -13,7 +13,13 @@ public enum ErrorMessage {
     ACCOUNT_ALREADY_EXIST(7, "이미 존재하는 계정입니다"),
     SCHOOL_NUMBER_ALREADY_EXIST(8, "이미 존재하는 학번 또는 교번입니다"),
     STUDENT_NOT_REGISTRATION(9, "해당 강의를 수강하지 않는 학생입니다"),
-    STUDENT_ALREADY_REGISTRATION(10, "이미 수강하고 있습니다")
+    STUDENT_ALREADY_REGISTRATION(10, "이미 수강하고 있습니다"),
+    USER_NOT_EXIST(11, "존재하지 않는 유저입니다"),
+
+
+    // lecture
+    USER_NOT_PROFESSOR(100, "user id 가 교수가 아닙니다"),
+    LECTURE_NOT_EXIST(101, "존재하지 않는 강의입니다")
     ;
 
     Integer code;

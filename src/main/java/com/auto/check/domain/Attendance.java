@@ -1,21 +1,46 @@
 package com.auto.check.domain;
 
+import com.auto.check.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Timestamp;
+import javax.persistence.*;
 
 @Getter
-@Setter
+@Entity
+@Table(name="attendance")
+@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Attendance {
+public class Attendance extends DefaultEntity{
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long user_id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user_id")
+    private User user;
+
     private int week;
-    private String day_of_week;
-    private Long lecture_info_id;
-    private Short is_attend;
-    private Timestamp created_at;
-    private Timestamp modified_at;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lecture_info_id")
+    private LectureInfo lectureInfo;
+
+    @Column(name = "is_attend")
+    private Short isAttend;
+
+    @Builder
+    public Attendance(Long id, User user, int week, LectureInfo lectureInfo, Short isAttend) {
+        this.id = id;
+        this.user = user;
+        this.week = week;
+        this.lectureInfo = lectureInfo;
+        this.isAttend = isAttend;
+    }
+
+    public void updateIsAttend(){
+        isAttend = isAttend == 0 ? (short)1 : 0;
+    }
 }

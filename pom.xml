@@ -109,12 +109,12 @@
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
 
-		<!--AWS 모든 SDK 모듈-->
-		<dependency>
-			<groupId>com.amazonaws</groupId>
-			<artifactId>aws-java-sdk</artifactId>
-			<version>1.11.327</version>
-		</dependency>
+<!--		&lt;!&ndash;AWS 모든 SDK 모듈&ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>com.amazonaws</groupId>-->
+<!--			<artifactId>aws-java-sdk</artifactId>-->
+<!--			<version>1.11.327</version>-->
+<!--		</dependency>-->
 
 		<!--Filter - ReadableRequestWrapperFilter -->
 		<dependency>

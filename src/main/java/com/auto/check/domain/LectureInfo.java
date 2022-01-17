@@ -1,19 +1,38 @@
 package com.auto.check.domain;
 
+import com.auto.check.domain.value.LectureRoom;
+import com.auto.check.domain.value.LectureTime;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Time;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@Getter @Setter
+@Getter
+@Entity
+@Table(name="lecture_info")
+@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LectureInfo {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long lecture_id;
-    private String lecture_room;
-    private String cctv_ip;
-    private String day_of_week;
-    private Time lecture_start;
-    private Time lecture_end;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lecture_id")
+    private Lecture lecture;
+
+    @Embedded
+    private LectureRoom lectureRoom;
+
+    @Embedded
+    private LectureTime lectureTime;
+
+    @OneToMany(mappedBy = "lectureInfo", orphanRemoval = true)
+    @ApiModelProperty(hidden = true)
+    private List<Attendance> attendanceList = new ArrayList<>();
 }
