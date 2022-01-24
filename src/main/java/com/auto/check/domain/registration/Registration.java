@@ -1,5 +1,7 @@
-package com.auto.check.domain;
+package com.auto.check.domain.registration;
 
+import com.auto.check.domain.DefaultEntity;
+import com.auto.check.domain.Lecture;
 import com.auto.check.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,9 +12,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Table(name="registration")
-public class Registration extends DefaultEntity{
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Registration extends DefaultEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

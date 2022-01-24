@@ -2,8 +2,6 @@ package com.auto.check.web;
 
 import com.auto.check.annotaion.Auth;
 import com.auto.check.config.ResponseData;
-import com.auto.check.domain.Lecture;
-import com.auto.check.domain.LectureInfo;
 import com.auto.check.service.LectureService;
 import com.auto.check.service.UserService;
 import com.auto.check.web.dto.LectureCreateRequestDTO;
@@ -25,9 +23,9 @@ public class LectureController {
     // 특정 강의의 출석여부 조회
     @Auth
     @GetMapping(value="/student")
-    @ApiOperation(value="출석여부 조회", notes="lectureId를 쿼리로 받아 해당 강의의 출석여부를 확인합니다", authorizations = @Authorization(value = "Bearer +accessToken"))
+    @ApiOperation(value="출석여부 조회", notes="lectureId를 쿼리로 받아 해당 강의의 로그인한 학생 출석여부를 확인합니다", authorizations = @Authorization(value = "Bearer +accessToken"))
     public ResponseEntity getLectureStudent(@RequestParam(value = "lectureId") Long lectureId){
-        return new ResponseEntity(ResponseData.of(lectureService.getLectureStudent(lectureId), HttpStatus.OK), HttpStatus.OK);
+        return new ResponseEntity(ResponseData.of(lectureService.getStudentLectureAttendanceList(lectureId), HttpStatus.OK), HttpStatus.OK);
     }
 
     @Auth
@@ -58,6 +56,8 @@ public class LectureController {
     public ResponseEntity createLecture(@RequestBody LectureCreateRequestDTO lecture){
         return new ResponseEntity(ResponseData.of(lectureService.createLecture(lecture), HttpStatus.CREATED), HttpStatus.CREATED);
     }
+
+
 
 //    @PostMapping(value="/info")
 //    @ApiOperation(value="강의정보생성", notes = "그냥 workbench 로 생성하셔도 됩니다 \n lecture 의 id, lectureRoom 의 lecture_room, lectureTime 안의 day_of_week 는 요일이고 start, end 는 00:00:00 포맷으로 채워주시면 됩니다")

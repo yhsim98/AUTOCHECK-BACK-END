@@ -1,6 +1,7 @@
 package com.auto.check.service;
 
 import com.auto.check.domain.user.User;
+import com.auto.check.domain.user.UserRepository;
 import com.auto.check.enums.ErrorMessage;
 import com.auto.check.exception.NonCriticalException;
 import com.auto.check.mapper.UserMapper;
@@ -10,6 +11,7 @@ import com.auto.check.web.dto.UserLoginRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -17,7 +19,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,17 +28,12 @@ import java.util.Map;
 public class UserService {
 
     private final Jwt jwt;
-    private final UserMapper userMapper;
-    @PersistenceContext
-    EntityManager em;
+    private final UserRepository userRepository;
+
 
     public Map userLogin(UserLoginRequestDTO user) {
-
-        User loginUser = userMapper.getPasswordByAccount(user.getAccount());
-
-        if(loginUser == null){
-            throw new NonCriticalException(ErrorMessage.ACCOUNT_NOT_EXIST);
-        }
+        User loginUser = userRepository.findByAccount(user.getAccount())
+                .orElseThrow(() -> new NonCriticalException(ErrorMessage.ACCOUNT_NOT_EXIST));
 
         if(!BCrypt.checkpw(user.getPassword(), loginUser.getPassword())){
             throw new NonCriticalException(ErrorMessage.WRONG_PASSWORD_EXCEPTION);
@@ -47,36 +43,26 @@ public class UserService {
 
         token.put("access_token", jwt.generateToken(loginUser.getId(), loginUser.getUser_type()));
 
-        System.out.println("token : " + token.get("access_token"));
         return token;
     }
 
     public User getLoginUserInfo() {
-
-        User user = null;
-
-
-        user = em.find(User.class, this.getLoginUserIdFromJwt());
-
-        if (user == null) {
-            throw new NonCriticalException(ErrorMessage.USER_NOT_EXIST);
-        }
-
-        return user;
+        return userRepository.findById(getLoginUserIdFromJwt())
+                .orElseThrow(() -> new NonCriticalException(ErrorMessage.USER_NOT_EXIST));
     }
 
     public void singInUser(User user) {
-        if (userMapper.getUserByAccount(user.getAccount()) != null) {
+        if (userRepository.countByAccount(user.getAccount()) > 0) {
             throw new NonCriticalException(ErrorMessage.ACCOUNT_ALREADY_EXIST);
         }
 
-        if(userMapper.getUserByNumber(user.getSchool_number()) != null){
+        if(userRepository.countBySchool_number(user.getSchool_number()) > 0){
             throw new NonCriticalException(ErrorMessage.SCHOOL_NUMBER_ALREADY_EXIST);
         }
 
         user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 
-        userMapper.insertUser(user);
+        userRepository.save(user);
     }
 
     private Long getLoginUserIdFromJwt(){

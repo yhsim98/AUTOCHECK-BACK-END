@@ -1,5 +1,6 @@
 package com.auto.check.domain.user;
 
+import com.auto.check.domain.DefaultEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -14,9 +15,7 @@ import javax.persistence.*;
 @Table(name="user")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
-public class User {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class User extends DefaultEntity {
 
     private String account;
 

@@ -1,5 +1,7 @@
-package com.auto.check.domain;
+package com.auto.check.domain.attendance;
 
+import com.auto.check.domain.DefaultEntity;
+import com.auto.check.domain.LectureInfo;
 import com.auto.check.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
@@ -14,9 +16,7 @@ import javax.persistence.*;
 @Table(name="attendance")
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Attendance extends DefaultEntity{
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Attendance extends DefaultEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
@@ -41,6 +41,6 @@ public class Attendance extends DefaultEntity{
     }
 
     public void updateIsAttend(){
-        isAttend = isAttend == 0 ? (short)1 : 0;
+        this.isAttend = this.isAttend == 0 ? (short)1 : 0;
     }
 }
