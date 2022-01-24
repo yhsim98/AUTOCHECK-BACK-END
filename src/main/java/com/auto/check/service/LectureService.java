@@ -1,25 +1,25 @@
 package com.auto.check.service;
 
-import com.auto.check.domain.Attendance;
+import com.auto.check.domain.attendance.Attendance;
 import com.auto.check.domain.Lecture;
 import com.auto.check.domain.LectureInfo;
+import com.auto.check.domain.registration.RegistrationRepository;
 import com.auto.check.domain.user.User;
 import com.auto.check.domain.user.UserType;
 import com.auto.check.enums.ErrorMessage;
 import com.auto.check.exception.NonCriticalException;
 import com.auto.check.mapper.AttendanceMapper;
 import com.auto.check.mapper.LectureMapper;
-import com.auto.check.util.EntityManagerFactoryUtil;
 import com.auto.check.web.dto.LectureCreateRequestDTO;
+import com.auto.check.web.dto.StudentAttendanceResponseDTO;
 import com.auto.check.web.dto.UserLectureInfoResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.var;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Transactional
@@ -27,39 +27,56 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LectureService {
 
-    private final LectureMapper lectureMapper;
-    private final AttendanceMapper attendanceMapper;
     private final UserService userService;
+    private final RegistrationRepository registrationRepository;
     @PersistenceContext
     EntityManager em;
 
     public List<UserLectureInfoResponseDTO> getLectureList() {
         User user = userService.getLoginUserInfo();
 
-        return em.createQuery("SELECT new com.auto.check.web.dto.UserLectureInfoResponseDTO(li.id, l.id, l.lectureName, li.lectureRoom.lecture_room, li.lectureTime)\n" +
-                        "        FROM LectureInfo li\n" +
-                        "        JOIN FETCH Lecture l\n ON l=li.lecture" +
-                        "        WHERE l IN(SELECT r.lecture FROM Registration r WHERE r.student.id=" + user.getId().toString() + ")")
+        List infoList;
+
+        if (user.getUser_type().equals(UserType.STUDENT)) {
+             infoList = em.createQuery("SELECT new com.auto.check.web.dto.UserLectureInfoResponseDTO(li.id, li.lecture.id, li.lecture.lectureName, li.lectureRoom.lecture_room, li.lectureTime)\n" +
+                            "        FROM LectureInfo li\n" +
+                            "        JOIN li.lecture" +
+                            "        WHERE li.lecture IN(SELECT r.lecture FROM Registration r WHERE r.student.id=:userId)")
+                    .setParameter("userId", user.getId())
+                    .getResultList();
+
+        } else{
+            infoList = em.createQuery("SELECT new com.auto.check.web.dto.UserLectureInfoResponseDTO(li.id, l.id, l.lectureName, li.lectureRoom.lecture_room, li.lectureTime)\n" +
+                            "        FROM LectureInfo li\n" +
+                            "        INNER JOIN Lecture l ON l.id = li.lecture.id" +
+                            "        WHERE l.professor.id = :userId")
+                    .setParameter("userId", user.getId())
+                    .getResultList();
+        }
+
+        return infoList;
+    }
+
+    public List<UserLectureInfoResponseDTO> getLectureInfo(Long lectureId) {
+
+        return em.createQuery("SELECT new com.auto.check.web.dto.UserLectureInfoResponseDTO(li.id, li.lecture.id, li.lecture.lectureName, li.lectureRoom.lecture_room, li.lectureTime)\n " +
+                        "       FROM LectureInfo li\n"  +
+                        "       INNER JOIN Lecture l ON l.id = li.lecture.id" +
+                        "       WHERE l.id = :lectureId")
+                .setParameter("lectureId", lectureId)
                 .getResultList();
     }
 
-    public List<LectureInfo> getLectureInfo(Long lectureId) {
-
-        List<LectureInfo> lectureInfoList = em.find(Lecture.class, lectureId).getLectureInfoList();
-
-        return lectureInfoList;
-    }
-
-    public List<Attendance> getLectureStudent(Long lectureId) {
+    public List<StudentAttendanceResponseDTO> getStudentLectureAttendanceList(Long lectureId) {
         User loginUser = userService.getLoginUserInfo();
 
-        if (lectureMapper.getRegistrationNumByUserIdAndLectureId(loginUser.getId(), lectureId) < 1) {
+        if (registrationRepository.countByStudentIdAndLectureId(loginUser.getId(), lectureId) < 1) {
             throw new NonCriticalException(ErrorMessage.STUDENT_NOT_REGISTRATION);
         }
 
         return em.createQuery("SELECT new com.auto.check.web.dto.StudentAttendanceResponseDTO(a.id, a.week, li.lectureTime.day_of_week, a.isAttend)\n" +
                         "        FROM Attendance a\n" +
-                        "        JOIN FETCH LectureInfo li ON li=a.lectureInfo\n" +
+                        "        INNER JOIN LectureInfo li ON li = a.lectureInfo\n" +
                         "        WHERE li.lecture.id=:lectureId AND a.user.id=:userId")
                 .setParameter("userId", loginUser.getId())
                 .setParameter("lectureId", lectureId)
@@ -70,7 +87,7 @@ public class LectureService {
 
         User user = userService.getLoginUserInfo();
 
-        lectureMapper.insertRegistration(user.getId(), lectureId);
+        //lectureMapper.insertRegistration(user.getId(), lectureId);
 
         Lecture lecture = em.find(Lecture.class, lectureId);
 

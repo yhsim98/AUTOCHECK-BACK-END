@@ -9,7 +9,7 @@
         WHERE lecture_id=#{lecture_id} AND user_id=#{user_id}
     </update>
 
-    <select id="getStudentLectureAttendanceList" resultType="com.auto.check.domain.Attendance">
+    <select id="getStudentLectureAttendanceList" resultType="com.auto.check.domain.attendance.Attendance">
         SELECT a.id, a.is_attend, a.user_id, a.week, li.day_of_week, li.lecture_start, li.lecture_end
         FROM attendance a
         JOIN lecture_info li ON li.id=a.lecture_info_id
