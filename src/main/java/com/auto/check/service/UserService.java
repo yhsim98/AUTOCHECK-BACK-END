@@ -4,10 +4,9 @@ import com.auto.check.domain.user.User;
 import com.auto.check.domain.user.UserRepository;
 import com.auto.check.enums.ErrorMessage;
 import com.auto.check.exception.NonCriticalException;
-import com.auto.check.mapper.UserMapper;
-import com.auto.check.util.EntityManagerFactoryUtil;
+
 import com.auto.check.util.Jwt;
-import com.auto.check.web.dto.UserLoginRequestDTO;
+import com.auto.check.web.dto.LoginRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
@@ -15,9 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +27,7 @@ public class UserService {
     private final UserRepository userRepository;
 
 
-    public Map userLogin(UserLoginRequestDTO user) {
+    public Map userLogin(LoginRequestDTO user) {
         User loginUser = userRepository.findByAccount(user.getAccount())
                 .orElseThrow(() -> new NonCriticalException(ErrorMessage.ACCOUNT_NOT_EXIST));
 
@@ -41,7 +37,7 @@ public class UserService {
 
         Map<String, String> token = new HashMap<>();
 
-        token.put("access_token", jwt.generateToken(loginUser.getId(), loginUser.getUser_type()));
+        token.put("access_token", jwt.generateToken(loginUser.getId(), loginUser.getUserType()));
 
         return token;
     }
@@ -56,11 +52,11 @@ public class UserService {
             throw new NonCriticalException(ErrorMessage.ACCOUNT_ALREADY_EXIST);
         }
 
-        if(userRepository.countBySchool_number(user.getSchool_number()) > 0){
+        if(userRepository.countBySchoolNumber(user.getSchoolNumber()) > 0){
             throw new NonCriticalException(ErrorMessage.SCHOOL_NUMBER_ALREADY_EXIST);
         }
 
-        user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+        user.changePasswordBcrypt(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 
         userRepository.save(user);
     }

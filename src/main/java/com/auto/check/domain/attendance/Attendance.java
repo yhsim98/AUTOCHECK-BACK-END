@@ -1,13 +1,12 @@
 package com.auto.check.domain.attendance;
 
 import com.auto.check.domain.DefaultEntity;
-import com.auto.check.domain.LectureInfo;
+import com.auto.check.domain.lectureinfo.LectureInfo;
 import com.auto.check.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -32,8 +31,7 @@ public class Attendance extends DefaultEntity {
     private Short isAttend;
 
     @Builder
-    public Attendance(Long id, User user, int week, LectureInfo lectureInfo, Short isAttend) {
-        this.id = id;
+    public Attendance(User user, int week, LectureInfo lectureInfo, Short isAttend) {
         this.user = user;
         this.week = week;
         this.lectureInfo = lectureInfo;
@@ -43,4 +41,6 @@ public class Attendance extends DefaultEntity {
     public void updateIsAttend(){
         this.isAttend = this.isAttend == 0 ? (short)1 : 0;
     }
+
+
 }

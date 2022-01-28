@@ -1,9 +1,11 @@
 package com.auto.check.web;
 
 import com.auto.check.config.ResponseData;
+import com.auto.check.domain.attendance.AttendanceRepository;
 import com.auto.check.domain.user.User;
+import com.auto.check.domain.user.UserRepository;
 import com.auto.check.service.UserService;
-import com.auto.check.web.dto.UserLoginRequestDTO;
+import com.auto.check.web.dto.LoginRequestDTO;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,7 @@ public class UserController {
 
     @PostMapping("/login")
     @ApiOperation(value="로그인 요청", notes="로그인 요청하는 api, 문제없다면 token 반환")
-    public ResponseEntity userLogin(@RequestBody UserLoginRequestDTO requestDTO){
+    public ResponseEntity userLogin(@RequestBody LoginRequestDTO requestDTO){
         return new ResponseEntity(ResponseData.of(userService.userLogin(requestDTO), HttpStatus.OK), HttpStatus.OK);
     }
 

@@ -1,16 +1,15 @@
 package com.auto.check.service;
 
 import com.auto.check.domain.attendance.Attendance;
-import com.auto.check.domain.Lecture;
-import com.auto.check.domain.LectureInfo;
+import com.auto.check.domain.lecture.Lecture;
+import com.auto.check.domain.lectureinfo.LectureInfo;
 import com.auto.check.domain.registration.RegistrationRepository;
 import com.auto.check.domain.user.User;
 import com.auto.check.domain.user.UserType;
 import com.auto.check.enums.ErrorMessage;
 import com.auto.check.exception.NonCriticalException;
-import com.auto.check.mapper.AttendanceMapper;
-import com.auto.check.mapper.LectureMapper;
-import com.auto.check.web.dto.LectureCreateRequestDTO;
+import com.auto.check.web.dto.CreateRectureRequestDTO;
+import com.auto.check.web.dto.LectureInfoCreateRequestDTO;
 import com.auto.check.web.dto.StudentAttendanceResponseDTO;
 import com.auto.check.web.dto.UserLectureInfoResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +36,7 @@ public class LectureService {
 
         List infoList;
 
-        if (user.getUser_type().equals(UserType.STUDENT)) {
+        if (user.getUserType().equals(UserType.STUDENT)) {
              infoList = em.createQuery("SELECT new com.auto.check.web.dto.UserLectureInfoResponseDTO(li.id, li.lecture.id, li.lecture.lectureName, li.lectureRoom.lecture_room, li.lectureTime)\n" +
                             "        FROM LectureInfo li\n" +
                             "        JOIN li.lecture" +
@@ -104,13 +103,11 @@ public class LectureService {
         }
     }
 
-    public Lecture createLecture(LectureCreateRequestDTO lecture) {
+    public Lecture createLecture(CreateRectureRequestDTO lecture) {
 
-        User user = em.find(User.class, lecture.getProfessorId());
+        User user = userService.getLoginUserInfo();
 
-        if (user == null) throw new NonCriticalException(ErrorMessage.USER_NOT_EXIST);
-
-        if (!user.getUser_type().equals(UserType.PROFESSOR)) {
+        if (!user.getUserType().equals(UserType.PROFESSOR)) {
             throw new NonCriticalException(ErrorMessage.USER_NOT_PROFESSOR);
         }
 
@@ -124,14 +121,14 @@ public class LectureService {
         return newLecture;
     }
 
-    public LectureInfo createLectureInfo(LectureInfo lectureInfo){
+    public LectureInfo createLectureInfo(LectureInfoCreateRequestDTO lectureInfo){
 
-        if(em.find(Lecture.class, lectureInfo.getLecture().getId()) == null){
+        if(em.find(Lecture.class, lectureInfo.getLectureId()) == null){
             throw new NonCriticalException(ErrorMessage.LECTURE_NOT_EXIST);
         }
 
         em.persist(lectureInfo);
 
-        return lectureInfo;
+        return null;
     }
 }

@@ -30,16 +30,10 @@ public class AttendanceService {
         attendance.updateIsAttend();
     }
 
-    public List<StudentAttendanceResponseDTO> getStudentsAttendanceList(int week, Long lectureInfoId){
+    public List getStudentsAttendanceList(int week, Long lectureInfoId){
 
-        return em.createQuery("SELECT new com.auto.check.web.dto.ProfessorAttendanceResponseDTO(" +
-                        "a.id, u.id, u.school_number, u.name, a.week, li.lectureTime.day_of_week, a.isAttend) " +
-                        "FROM Attendance a " +
-                        "INNER JOIN LectureInfo li ON li.id = a.lectureInfo.id " +
-                        "INNER JOIN User u ON u = a.user " +
-                        "WHERE a.week=:week AND a.lectureInfo.id=:id")
-                .setParameter("week", week)
-                .setParameter("id", lectureInfoId)
-                .getResultList();
+        return attendanceRepository.findAttendancesByUserId(week, lectureInfoId)
+                .stream()
+                .toArray();
     }
 }

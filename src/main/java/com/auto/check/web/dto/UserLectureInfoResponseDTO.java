@@ -1,10 +1,8 @@
 package com.auto.check.web.dto;
 
-import com.auto.check.domain.Lecture;
-import com.auto.check.domain.LectureInfo;
+import com.auto.check.domain.lectureinfo.LectureInfo;
 import com.auto.check.domain.value.LectureTime;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 public class UserLectureInfoResponseDTO {

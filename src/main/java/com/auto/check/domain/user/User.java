@@ -2,6 +2,8 @@ package com.auto.check.domain.user;
 
 import com.auto.check.domain.DefaultEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,10 +12,11 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Getter @Setter
+@Getter
 @Entity
 @Table(name="user")
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @NoArgsConstructor
 public class User extends DefaultEntity {
 
@@ -23,21 +26,28 @@ public class User extends DefaultEntity {
 
     private String name;
 
-    private String school_number;
+    @Column(name="school_number")
+    private String schoolNumber;
 
     @ApiModelProperty(hidden = true)
-    private String img_path;
+    @Column(name="img_path")
+    private String imgPath;
 
     @Enumerated(EnumType.STRING)
-    private UserType user_type;
+    @Column(name="user_type")
+    private UserType userType;
 
     @Builder
-    public User(String account, String password, String name, String school_number, String img_path, UserType user_type) {
+    public User(String account, String password, String name, String schoolNumber, String imgPath, UserType userType) {
         this.account = account;
         this.password = password;
         this.name = name;
-        this.school_number = school_number;
-        this.img_path = img_path;
-        this.user_type = user_type;
+        this.schoolNumber = schoolNumber;
+        this.imgPath = imgPath;
+        this.userType = userType;
+    }
+
+    public void changePasswordBcrypt(String password){
+        this.password = password;
     }
 }

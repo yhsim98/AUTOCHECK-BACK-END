@@ -1,13 +1,14 @@
 package com.auto.check.web.dto;
 
-import com.auto.check.domain.Lecture;
-import com.auto.check.domain.user.User;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class LectureCreateRequestDTO {
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+public class CreateRectureRequestDTO {
     private String lectureName;
     private Long professorId;
     private String semester;

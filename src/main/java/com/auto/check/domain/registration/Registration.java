@@ -1,7 +1,7 @@
 package com.auto.check.domain.registration;
 
 import com.auto.check.domain.DefaultEntity;
-import com.auto.check.domain.Lecture;
+import com.auto.check.domain.lecture.Lecture;
 import com.auto.check.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
