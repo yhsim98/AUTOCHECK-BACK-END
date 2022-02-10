@@ -32,10 +32,6 @@ public class LectureInfo extends DefaultEntity {
     @Embedded
     private LectureTime lectureTime;
 
-    @OneToMany(mappedBy = "lectureInfo")
-    @ApiModelProperty(hidden = true)
-    private List<Attendance> attendanceList = new ArrayList<>();
-
     @Builder
     public LectureInfo(Lecture lecture, LectureRoom lectureRoom, LectureTime lectureTime) {
         this.lecture = lecture;

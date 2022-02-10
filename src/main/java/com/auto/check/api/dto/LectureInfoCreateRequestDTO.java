@@ -1,11 +1,10 @@
-package com.auto.check.web.dto;
+package com.auto.check.api.dto;
 
 import com.auto.check.domain.lecture.Lecture;
 import com.auto.check.domain.lectureinfo.LectureInfo;
 import com.auto.check.domain.value.LectureRoom;
 import com.auto.check.domain.value.LectureTime;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;

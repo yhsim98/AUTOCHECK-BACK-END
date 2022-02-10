@@ -1,9 +1,11 @@
-package com.auto.check.web.dto;
+package com.auto.check.api.dto;
 
-import com.auto.check.domain.user.User;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 
 @Getter
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class ProfessorAttendanceResponseDTO {
     private Long attendanceId;
     private Long userId;

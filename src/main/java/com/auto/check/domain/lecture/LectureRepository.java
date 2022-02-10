@@ -2,5 +2,8 @@ package com.auto.check.domain.lecture;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface LectureRepository extends JpaRepository<Lecture, Long> {
+import java.util.List;
+
+public interface LectureRepository extends JpaRepository<Lecture, Long>, LectureRepositoryCustom {
+    List<Lecture> findLectureByProfessor(Long userId);
 }

@@ -16,10 +16,12 @@ public enum ErrorMessage {
     STUDENT_ALREADY_REGISTRATION(10, "이미 수강하고 있습니다"),
     USER_NOT_EXIST(11, "존재하지 않는 유저입니다"),
 
-
     // lecture
     USER_NOT_PROFESSOR(100, "user id 가 교수가 아닙니다"),
-    LECTURE_NOT_EXIST(101, "존재하지 않는 강의입니다")
+    LECTURE_NOT_EXIST(101, "존재하지 않는 강의입니다"),
+
+    // registration
+    ALREADY_REGISTRATION(500, "이미 수강되어 있습니다"),
     ;
 
     Integer code;

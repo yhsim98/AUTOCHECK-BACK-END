@@ -1,11 +1,9 @@
-package com.auto.check.web;
+package com.auto.check.api;
 
 import com.auto.check.config.ResponseData;
-import com.auto.check.domain.attendance.AttendanceRepository;
 import com.auto.check.domain.user.User;
-import com.auto.check.domain.user.UserRepository;
 import com.auto.check.service.UserService;
-import com.auto.check.web.dto.LoginRequestDTO;
+import com.auto.check.api.dto.LoginRequestDTO;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;

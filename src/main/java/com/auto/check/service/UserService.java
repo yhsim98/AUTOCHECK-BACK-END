@@ -6,7 +6,7 @@ import com.auto.check.enums.ErrorMessage;
 import com.auto.check.exception.NonCriticalException;
 
 import com.auto.check.util.Jwt;
-import com.auto.check.web.dto.LoginRequestDTO;
+import com.auto.check.api.dto.LoginRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,12 @@ public class UserService {
     }
 
     public User getLoginUserInfo() {
-        return userRepository.findById(getLoginUserIdFromJwt())
+        Long userId = getLoginUserIdFromJwt();
+        return getUserInfoById(userId);
+    }
+
+    public User getUserInfoById(Long id){
+        return userRepository.findById(id)
                 .orElseThrow(() -> new NonCriticalException(ErrorMessage.USER_NOT_EXIST));
     }
 

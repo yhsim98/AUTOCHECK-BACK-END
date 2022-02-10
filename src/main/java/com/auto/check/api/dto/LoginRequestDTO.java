@@ -1,4 +1,4 @@
-package com.auto.check.web.dto;
+package com.auto.check.api.dto;
 
 import com.auto.check.domain.user.User;
 import lombok.Getter;
