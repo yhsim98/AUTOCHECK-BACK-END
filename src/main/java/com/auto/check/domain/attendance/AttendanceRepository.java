@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface AttendanceRepository extends JpaRepository<Attendance, Long>, AttendanceRepositoryCustom{
-    List<Attendance> findAttendanceByLectureInfoAndWeek(int week, LectureInfo lectureInfo);
+    List<Attendance> findAttendanceByLectureInfoAndWeek(LectureInfo li, int week);
 
     @Modifying(clearAutomatically = true)
     @Query("update Attendance a set a.isAttend=1 where a.user.id=:id")

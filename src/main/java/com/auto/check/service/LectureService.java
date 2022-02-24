@@ -1,6 +1,5 @@
 package com.auto.check.service;
 
-import com.auto.check.api.dto.*;
 import com.auto.check.domain.lecture.Lecture;
 import com.auto.check.domain.lecture.LectureRepository;
 import com.auto.check.domain.lectureinfo.LectureInfo;
@@ -15,8 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Transactional
+
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class LectureService {
 
@@ -31,15 +31,17 @@ public class LectureService {
              return lectureRepository.findUserLectureList(user.getId());
 
         } else{
-            return lectureRepository.findLectureByProfessor(user.getId());
+            return lectureRepository.findLectureByProfessor(user);
         }
     }
 
     public List<LectureInfo> getLectureInfoList(Long lectureId) {
-        return getLectureById(lectureId).getLectureInfoList();
+        Lecture lecture = getLectureById(lectureId);
+        lecture.getLectureInfoList().forEach(LectureInfo::getLectureTime);
+        return lecture.getLectureInfoList();
     }
 
-
+    @Transactional
     public Lecture createLecture(Lecture lecture) {
 
         User user = userService.getLoginUserInfo();

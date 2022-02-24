@@ -3,11 +3,10 @@ package com.auto.check.api;
 import com.auto.check.annotaion.Auth;
 import com.auto.check.api.dto.StudentAttendanceResponse;
 import com.auto.check.api.dto.StudentLectureAttendanceResponse;
-import com.auto.check.config.ResponseData;
+import com.auto.check.api.response.BaseResponse;
 import com.auto.check.domain.attendance.Attendance;
 import com.auto.check.domain.lectureinfo.LectureInfo;
 import com.auto.check.service.AttendanceService;
-import com.auto.check.service.LectureService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
@@ -40,27 +39,27 @@ public class AttendanceController {
     @ApiOperation(value = "출석여부변경 API", notes="출석여부를 변경하는 API 입니다. role 이 professor 이어야 사용가능합니다. \n week(해당 주차)와 studentId 를 받습니다. \n 출석이면 미출석, 미출석이면 출석으로 변경합니다.", authorizations = @Authorization(value = "Bearer +accessToken"))
     public ResponseEntity alterStudentAttendance(@RequestParam Long attendanceId) {
         attendanceService.alterStudentAttendance(attendanceId);
-        return new ResponseEntity(ResponseData.of(HttpStatus.OK), HttpStatus.OK);
+        return new ResponseEntity(BaseResponse.of(HttpStatus.OK), HttpStatus.OK);
     }
 
     @Auth
     @GetMapping(value="/professor/lecture")
     @ApiOperation(value = "해당 주차의 학생 출석 리스트", notes="특정 강의 해당 주차, 해당 요일의 모든 학생들의 출석정보를 반환하는 API 입니다. role 이 professor 이어야 사용가능합니다. \n week(해당 주차)와 lectureInfoId 를 받습니다.", authorizations = @Authorization(value = "Bearer +accessToken"))
-    public ResponseEntity<List<StudentAttendanceResponse>> getLectureStudentAttendanceListByWeek(@RequestParam int week,
-                                                                                          @RequestParam Long lectureInfoId) {
+    public ResponseEntity getLectureStudentAttendanceListByWeek(@RequestParam int week,
+                                                                @RequestParam Long lectureInfoId) {
 
         List<StudentAttendanceResponse> result = attendanceService.getLectureStudentsAttendanceList(week, lectureInfoId).stream()
                 .map(StudentAttendanceResponse::new)
                 .collect(Collectors.toList());
 
-        return new ResponseEntity(ResponseData.of(result, HttpStatus.OK), HttpStatus.OK);
+        return new ResponseEntity(BaseResponse.of(result, HttpStatus.OK), HttpStatus.OK);
     }
 
     @Auth
     @PatchMapping(value="/auto-check")
     @ApiOperation(value = "출석시작", notes="출석시작 API, lecture_info_id 와 week 를 받습니다. \n 강의시간이 아닌 경우 예외가 발생합니다", authorizations = @Authorization(value = "Bearer +accessToken"))
     public ResponseEntity startAutoCheck(@RequestParam Long lectureInfoId, @RequestParam int week){
-        return new ResponseEntity(ResponseData.of(HttpStatus.OK), HttpStatus.OK);
+        return new ResponseEntity(BaseResponse.of(HttpStatus.OK), HttpStatus.OK);
     }
 
     // 특정 강의의 출석여부 조회
@@ -76,6 +75,6 @@ public class AttendanceController {
                 .map(k->new StudentLectureAttendanceResponse(k, collect.get(k)))
                 .collect(Collectors.toList());
 
-        return new ResponseEntity(ResponseData.of(result, HttpStatus.OK), HttpStatus.OK);
+        return new ResponseEntity(BaseResponse.of(result, HttpStatus.OK), HttpStatus.OK);
     }
 }

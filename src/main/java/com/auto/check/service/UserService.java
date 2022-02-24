@@ -13,12 +13,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-@Transactional
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -52,6 +57,7 @@ public class UserService {
                 .orElseThrow(() -> new NonCriticalException(ErrorMessage.USER_NOT_EXIST));
     }
 
+    @Transactional
     public void singInUser(User user) {
         if (userRepository.countByAccount(user.getAccount()) > 0) {
             throw new NonCriticalException(ErrorMessage.ACCOUNT_ALREADY_EXIST);
@@ -74,4 +80,22 @@ public class UserService {
 
         return Long.valueOf(String.valueOf(jwt.getClaimsFromJwt(token).get("id")));
     }
+
+    public String saveImages(List<MultipartFile> images) throws IOException {
+        images.forEach(UserService::saveLocal);
+        return null;
+    }
+
+    private static void saveLocal(MultipartFile image) {
+        try {
+            BufferedImage inputImage = ImageIO.read(image.getInputStream());
+            System.out.println(image.getOriginalFilename());
+            File file = new File("C:\\Users\\2008q\\Desktop\\" + image.getOriginalFilename());
+            ImageIO.write(inputImage, "png", file);
+
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
 }

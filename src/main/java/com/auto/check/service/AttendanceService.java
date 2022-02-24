@@ -26,14 +26,17 @@ public class AttendanceService {
     private final RegistrationService registrationService;
 
     public void alterStudentAttendance(Long attendanceId) {
-
         Attendance attendance = attendanceRepository.findById(attendanceId)
                         .orElseThrow(() -> new NonCriticalException(ErrorMessage.UNDEFINED_EXCEPTION));
 
         attendance.updateIsAttend();
     }
 
-    public void createStudentAttendanceInfo(User user, Lecture lecture){
+    public void singUpClass(Long lectureId){
+        User user = userService.getLoginUserInfo();
+        Lecture lecture = lectureService.getLectureById(lectureId);
+        registrationService.singUpClass(user, lecture);
+
         for (int i = 1; i <= 14; i++) {
             for (var l : lecture.getLectureInfoList()) {
                 Attendance attendance = Attendance.builder()
@@ -60,7 +63,6 @@ public class AttendanceService {
 
     public List<Attendance> getLectureStudentsAttendanceList(int week, Long lectureInfoId){
         LectureInfo lectureInfo = lectureService.getLectureInfoById(lectureInfoId);
-        return attendanceRepository.findAttendanceByLectureInfoAndWeek(week, lectureInfo);
-
+        return attendanceRepository.findAttendanceByLectureInfoAndWeek(lectureInfo, week);
     }
 }

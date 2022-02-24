@@ -1,4 +1,4 @@
-package com.auto.check.config;
+package com.auto.check.api.response;
 
 
 import com.sun.istack.Nullable;
@@ -8,16 +8,16 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @NoArgsConstructor
-public class ResponseData {
-    private Object data;
+public class BaseResponse<T> {
+    private T data;
     private Integer code;
 
-    public static ResponseData of(HttpStatus code){
+    public static BaseResponse of(HttpStatus code){
         return of(null, code);
     }
 
-    public static ResponseData of(@Nullable Object data, HttpStatus code){
-        ResponseData responseBody = new ResponseData();
+    public static <T> BaseResponse of(@Nullable T data, HttpStatus code){
+        BaseResponse responseBody = new BaseResponse();
 
         responseBody.data = data;
         responseBody.code = code.value();

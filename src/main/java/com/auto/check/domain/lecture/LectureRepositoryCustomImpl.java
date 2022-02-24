@@ -21,10 +21,11 @@ public class LectureRepositoryCustomImpl implements LectureRepositoryCustom{
     public List<Lecture> findUserLectureList(Long userId) {
         return queryFactory.selectFrom(lecture)
                 .distinct()
-                .innerJoin(registration.lecture(), lecture)
-                .where(registration.student().id.eq(userId))
+                .innerJoin(registration)
+                .on(registration.lecture().eq(lecture))
                 .innerJoin(lecture.lectureInfoList, lectureInfo)
                 .fetchJoin()
+                .where(registration.student().id.eq(userId))
                 .fetch();
     }
 }

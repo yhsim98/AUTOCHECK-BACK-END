@@ -1,5 +1,6 @@
 package com.auto.check.domain.attendance;
 
+import com.auto.check.domain.lectureinfo.LectureInfo;
 import com.auto.check.domain.lectureinfo.QLectureInfo;
 import com.auto.check.domain.user.QUser;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -23,7 +24,7 @@ public class AttendanceRepositoryCustomImpl implements AttendanceRepositoryCusto
     }
 
     @Override
-    public List<Attendance> findAttendancesByUserId(int week, Long lectureInfoId) {
+    public List<Attendance> findAttendanceByLectureInfoAndWeek(LectureInfo li, int week) {
         return queryFactory.selectFrom(attendance)
                 .innerJoin(attendance.lectureInfo, lectureInfo)
                 .fetchJoin()
@@ -31,7 +32,7 @@ public class AttendanceRepositoryCustomImpl implements AttendanceRepositoryCusto
                 .fetchJoin()
                 .distinct()
                 .where(attendance.week.eq(week))
-                .where(attendance.lectureInfo.id.eq(lectureInfoId))
+                .where(attendance.lectureInfo.id.eq(li.getId()))
                 .fetch();
     }
 }

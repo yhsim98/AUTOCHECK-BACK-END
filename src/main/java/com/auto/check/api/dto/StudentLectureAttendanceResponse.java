@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 public class StudentLectureAttendanceResponse {
     private Long lectureInfoId;
     private String dayOfWeek;
-    private List<AttendanceDTO> attendanceResponseList;
+    private List<AttendanceDTO> attendanceList;
 
     public StudentLectureAttendanceResponse(LectureInfo lectureInfo, List<Attendance> attendanceList) {
         this.lectureInfoId = lectureInfo.getId();
         this.dayOfWeek = lectureInfo.getLectureTime().getDay_of_week();
-        this.attendanceResponseList = attendanceList.stream()
+        this.attendanceList = attendanceList.stream()
                 .map(AttendanceDTO::new)
                 .collect(Collectors.toList());
     }
