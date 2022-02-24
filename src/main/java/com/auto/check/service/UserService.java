@@ -1,5 +1,7 @@
 package com.auto.check.service;
 
+import com.auto.check.domain.face.FaceImage;
+import com.auto.check.domain.face.FaceImageRepository;
 import com.auto.check.domain.user.User;
 import com.auto.check.domain.user.UserRepository;
 import com.auto.check.enums.ErrorMessage;
@@ -7,6 +9,7 @@ import com.auto.check.exception.NonCriticalException;
 
 import com.auto.check.util.Jwt;
 import com.auto.check.api.dto.LoginRequestDTO;
+import com.auto.check.util.S3Util;
 import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +34,8 @@ public class UserService {
 
     private final Jwt jwt;
     private final UserRepository userRepository;
+    private final S3Util s3Util;
+    private final FaceImageRepository faceImageRepository;
 
 
     public Map userLogin(LoginRequestDTO user) {
@@ -81,9 +87,22 @@ public class UserService {
         return Long.valueOf(String.valueOf(jwt.getClaimsFromJwt(token).get("id")));
     }
 
-    public String saveImages(List<MultipartFile> images) throws IOException {
-        images.forEach(UserService::saveLocal);
-        return null;
+    public List<FaceImage> saveImages(List<MultipartFile> images) {
+        User user = getLoginUserInfo();
+
+        for (MultipartFile image : images) {
+            String savedUrl = s3Util.uploader(image);
+
+            faceImageRepository.save(
+                    FaceImage.builder()
+                            .savedUrl(savedUrl)
+                            .fileName(image.getOriginalFilename())
+                            .user(user)
+                            .build()
+            );
+        }
+
+        return faceImageRepository.findByUser(user);
     }
 
     private static void saveLocal(MultipartFile image) {

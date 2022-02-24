@@ -22,6 +22,9 @@ public enum ErrorMessage {
 
     // registration
     ALREADY_REGISTRATION(500, "이미 수강되어 있습니다"),
+    
+    //file
+    FILE_UPLOAD_FAIL(1000, "파일 s3 업로드 실패")
     ;
 
     Integer code;

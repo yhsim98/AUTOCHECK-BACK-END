@@ -17,7 +17,6 @@ import java.util.List;
 @Entity
 @Table(name="lecture")
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Lecture extends DefaultEntity {
 
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)

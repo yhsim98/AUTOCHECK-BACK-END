@@ -19,6 +19,18 @@
 		<!-- 테스트 버전 -->
 		<junit.version>4.12</junit.version>
 	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.amazonaws</groupId>
+				<artifactId>aws-java-sdk-bom</artifactId>
+				<version>1.11.1000</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -123,6 +135,10 @@
 <!--			<version>1.11.327</version>-->
 <!--		</dependency>-->
 
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-s3</artifactId>
+		</dependency>
 		<!--Filter - ReadableRequestWrapperFilter -->
 		<dependency>
 			<groupId>commons-lang</groupId>

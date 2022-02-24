@@ -1,6 +1,8 @@
 package com.auto.check.api;
 
+import com.auto.check.api.dto.FaceImageDTO;
 import com.auto.check.api.response.BaseResponse;
+import com.auto.check.domain.face.FaceImage;
 import com.auto.check.domain.user.User;
 import com.auto.check.service.UserService;
 import com.auto.check.api.dto.LoginRequestDTO;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,7 +48,10 @@ public class UserController {
     @PostMapping(path= "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value="사진등록 API", notes="유저 사진등록 api", authorizations = @Authorization(value = "Bearer +accessToken"))
     public ResponseEntity userFaceImages(@RequestParam("file") List<MultipartFile> images) throws IOException {
-        userService.saveImages(images);
-        return null;
+        List<FaceImageDTO> result = userService.saveImages(images).stream()
+                .map(FaceImageDTO::new)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity(BaseResponse.of(result, HttpStatus.CREATED), HttpStatus.CREATED);
     }
 }
