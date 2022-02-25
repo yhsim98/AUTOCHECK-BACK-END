@@ -14,25 +14,12 @@ import java.util.stream.Collectors;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class LectureInfoResponse {
     private Long lectureId;
-    private List<LectureInfoDTO> lectureInfo;
+    private List<UserLectureInfoResponse> lectureInfo;
     public LectureInfoResponse(Long lectureId, List<LectureInfo> lectureInfoList) {
         this.lectureId = lectureId;
         this.lectureInfo = lectureInfoList.stream()
-                .map(LectureInfoDTO::new)
+                .map(UserLectureInfoResponse::new)
                 .collect(Collectors.toList());
     }
 }
 
-@Data
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-class LectureInfoDTO{
-    private Long lectureInfoId;
-    private LectureTime lectureTime;
-    private LectureRoom lectureRoom;
-
-    public LectureInfoDTO(LectureInfo lectureInfo) {
-        this.lectureInfoId = lectureInfo.getId();
-        this.lectureTime = lectureInfo.getLectureTime();
-        this.lectureRoom = lectureInfo.getLectureRoom();
-    }
-}

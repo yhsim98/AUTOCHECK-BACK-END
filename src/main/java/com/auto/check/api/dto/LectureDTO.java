@@ -9,18 +9,22 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class LectureDTO {
     private Long lectureId;
-    private String semester;
     private String lectureName;
+    private List<UserLectureInfoResponse> lectureInfoList;
 
     public LectureDTO(Lecture lecture) {
         this.lectureId = lecture.getId();
-        this.semester = lecture.getSemester();
         this.lectureName = lecture.getLectureName();
+        this.lectureInfoList = lecture.getLectureInfoList()
+                .stream()
+                .map(UserLectureInfoResponse::new)
+                .collect(Collectors.toList());
     }
 }

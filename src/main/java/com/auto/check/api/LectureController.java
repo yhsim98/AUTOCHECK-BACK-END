@@ -3,6 +3,7 @@ package com.auto.check.api;
 import com.auto.check.annotaion.Auth;
 import com.auto.check.api.dto.LectureDTO;
 import com.auto.check.api.dto.LectureInfoResponse;
+import com.auto.check.api.dto.UserLectureResponse;
 import com.auto.check.api.response.BaseResponse;
 import com.auto.check.domain.lecture.Lecture;
 import com.auto.check.domain.user.User;
@@ -41,10 +42,10 @@ public class LectureController {
     // 해당 유저의 강의 목록 조회
     @Auth
     @GetMapping(value="/user")
-    @ApiOperation(value="강의 목록 조회", notes="해당 유저의 강의 혹은 수강하는 강의의 목록 반환", authorizations = @Authorization(value = "Bearer +accessToken"))
+    @ApiOperation(value="강의 목록 조회", notes="해당 유저의 강의 혹은 수강하는 강의의 목록과 각 강의 정보 리스트 반환", authorizations = @Authorization(value = "Bearer +accessToken"))
     public ResponseEntity getUserLectureList(){
-        List<LectureDTO> response = lectureService.findUserLectureList().stream()
-                .map(LectureDTO::new)
+        List<UserLectureResponse> response = lectureService.findUserLectureList().stream()
+                .map(UserLectureResponse::new)
                 .collect(Collectors.toList());
 
         return new ResponseEntity(BaseResponse.of(response, HttpStatus.OK), HttpStatus.OK);
