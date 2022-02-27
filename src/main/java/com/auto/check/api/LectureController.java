@@ -35,7 +35,8 @@ public class LectureController {
     @GetMapping("/professor")
     @ApiOperation(value = "해당 강의 정보 반환", notes="강의 id 를 받으면 해당 강의 정보 반환", authorizations = @Authorization(value = "Bearer +accessToken"))
     public ResponseEntity getLectureInfo(@RequestParam(value="lectureId") Long lectureId){
-        LectureInfoResponse response = new LectureInfoResponse(lectureId, lectureService.getLectureInfoList(lectureId));
+        Lecture lecture = lectureService.getLectureById(lectureId);
+        LectureInfoResponse response = new LectureInfoResponse(lecture, lectureService.getLectureInfoList(lectureId));
         return new ResponseEntity(BaseResponse.of(response, HttpStatus.OK), HttpStatus.OK);
     }
 

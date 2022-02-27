@@ -117,4 +117,12 @@ public class UserService {
         }
     }
 
+    public void deleteImage(Long faceImageId){
+        User user = getLoginUserInfo();
+        FaceImage faceImage = faceImageRepository.findByIdAndUser(faceImageId, user)
+                .orElseThrow(()->new NonCriticalException(ErrorMessage.IMAGE_NOT_EXIST));
+
+        s3Util.deleteFile(faceImage.getSavedUrl());
+        faceImageRepository.delete(faceImage);
+    }
 }

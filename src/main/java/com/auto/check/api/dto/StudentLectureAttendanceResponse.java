@@ -26,6 +26,7 @@ public class StudentLectureAttendanceResponse {
 }
 
 @Data
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 class AttendanceDTO{
     private Long attendanceId;
     private int week;

@@ -24,7 +24,10 @@ public enum ErrorMessage {
     ALREADY_REGISTRATION(500, "이미 수강되어 있습니다"),
     
     //file
-    FILE_UPLOAD_FAIL(1000, "파일 s3 업로드 실패")
+    FILE_UPLOAD_FAIL(1000, "파일 s3 업로드 실패"),
+    
+    //image
+    IMAGE_NOT_EXIST(1500, "이미지가 존재하지 않습니다")
     ;
 
     Integer code;

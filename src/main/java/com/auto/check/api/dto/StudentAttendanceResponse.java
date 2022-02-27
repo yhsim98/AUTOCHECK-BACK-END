@@ -10,13 +10,15 @@ import lombok.Getter;
 public class StudentAttendanceResponse {
     private Long attendanceId;
     private Long userId;
-    private String userName;
+    private String name;
+    private String schoolNumber;
     private Short isAttend;
 
     public StudentAttendanceResponse(Attendance attendance) {
         this.attendanceId = attendance.getId();
         this.userId = attendance.getUser().getId();
-        this.userName = attendance.getUser().getName();
+        this.name = attendance.getUser().getName();
+        this.schoolNumber = attendance.getUser().getSchoolNumber();
         this.isAttend = attendance.getIsAttend();
     }
 }
