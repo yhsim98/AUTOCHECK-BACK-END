@@ -89,7 +89,7 @@ public class AttendanceRepositoryTest {
         User user = User.builder()
                 .account("qwer")
                 .password("2345")
-                .name("asd").schoolNumber("as").imgPath("asd").userType(UserType.STUDENT)
+                .name("asd").schoolNumber("as").userType(UserType.STUDENT)
                 .build();
 
         userRepository.save(user);

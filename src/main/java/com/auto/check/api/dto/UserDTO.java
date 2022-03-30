@@ -19,7 +19,6 @@ public class UserDTO {
     private String account;
     private String name;
     private String schoolNumber;
-    private String imgPath;
     private UserType userType;
 
     public UserDTO(User user) {
@@ -27,7 +26,6 @@ public class UserDTO {
         this.account = user.getAccount();
         this.name = user.getName();
         this.schoolNumber = user.getSchoolNumber();
-        this.imgPath = user.getImgPath();
         this.userType = user.getUserType();
     }
 }

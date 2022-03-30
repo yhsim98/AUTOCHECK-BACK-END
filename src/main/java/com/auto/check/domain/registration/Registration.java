@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name="registration")
+@Table(name="student_lecture")
 public class Registration extends DefaultEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

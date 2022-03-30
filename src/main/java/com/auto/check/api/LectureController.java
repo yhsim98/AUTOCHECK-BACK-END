@@ -54,7 +54,7 @@ public class LectureController {
 
     @Auth
     @PostMapping(value="/registration")
-    @ApiOperation(value="수강신청", notes="수강신청 API 토큰과 함께 수강하고자 하는 강의의 ID 를 보내면 됩니다. \n 출석정보도 같이 생성이 됩니다", authorizations = @Authorization(value = "Bearer +accessToken"))
+    @ApiOperation(value="수강신청", notes="수강신청 API, 토큰과 함께 수강하고자 하는 강의의 ID 를 보내면 됩니다. \n 출석정보도 같이 생성이 됩니다", authorizations = @Authorization(value = "Bearer +accessToken"))
     public ResponseEntity singUpClass(@RequestParam Long lectureId){
         attendanceService.singUpClass(lectureId);
         return new ResponseEntity(BaseResponse.of(HttpStatus.OK), HttpStatus.CREATED);
@@ -65,7 +65,8 @@ public class LectureController {
     public ResponseEntity createLecture(@RequestBody CreateLectureRequestDTO createLectureRequest){
         User professor = userService.getUserInfoById(createLectureRequest.getProfessorId());
         Lecture lecture = createLectureRequest.toEntity(professor);
-        return new ResponseEntity(BaseResponse.of(lectureService.createLecture(lecture), HttpStatus.CREATED), HttpStatus.CREATED);
+        lectureService.createLecture(lecture);
+        return new ResponseEntity(BaseResponse.of(HttpStatus.CREATED), HttpStatus.CREATED);
     }
 
 }

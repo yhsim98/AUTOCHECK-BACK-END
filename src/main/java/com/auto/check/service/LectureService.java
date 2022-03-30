@@ -16,7 +16,7 @@ import java.util.List;
 
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class LectureService {
 
@@ -44,7 +44,7 @@ public class LectureService {
     @Transactional
     public Lecture createLecture(Lecture lecture) {
 
-        User user = userService.getLoginUserInfo();
+        User user = lecture.getProfessor();
 
         if (!user.getUserType().equals(UserType.PROFESSOR)) {
             throw new NonCriticalException(ErrorMessage.USER_NOT_PROFESSOR);

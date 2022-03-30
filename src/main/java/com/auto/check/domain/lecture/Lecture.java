@@ -20,7 +20,6 @@ import java.util.List;
 public class Lecture extends DefaultEntity {
 
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ApiModelProperty(hidden = true)
     private List<LectureInfo> lectureInfoList = new ArrayList<>();
 
     @Column(name = "lecture_name")
@@ -30,12 +29,9 @@ public class Lecture extends DefaultEntity {
     @JoinColumn(name="professor_id")
     private User professor;
 
-    private String semester;
-
     @Builder
     public Lecture(String lectureName, User professor, String semester) {
         this.lectureName = lectureName;
         this.professor = professor;
-        this.semester = semester;
     }
 }

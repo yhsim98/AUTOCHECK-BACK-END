@@ -2,22 +2,28 @@ package com.auto.check.api;
 
 import com.auto.check.annotaion.Auth;
 import com.auto.check.api.dto.FaceImageDTO;
+import com.auto.check.api.dto.SignInRequestDTO;
 import com.auto.check.api.dto.UserDTO;
 import com.auto.check.api.response.BaseResponse;
-import com.auto.check.domain.face.FaceImage;
 import com.auto.check.domain.user.User;
+import com.auto.check.service.FaceImageService;
 import com.auto.check.service.UserService;
 import com.auto.check.api.dto.LoginRequestDTO;
+import com.auto.check.service.dto.RequestImageTrainDTO;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +34,7 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserService userService;
+    private final FaceImageService faceImageService;
 
     @PostMapping("/login")
     @ApiOperation(value="로그인 요청", notes="로그인 요청하는 api, 문제없다면 token 반환")
@@ -44,16 +51,16 @@ public class UserController {
 
     @PostMapping("/sing-in")
     @ApiOperation(value = "회원가입 API", notes="유저회원가입 API 입니다. ")
-    public ResponseEntity singIn(@RequestBody User user){
-        userService.singInUser(user);
-        return new ResponseEntity(BaseResponse.of(HttpStatus.OK), HttpStatus.CREATED);
+    public ResponseEntity singIn(@RequestBody SignInRequestDTO request){
+        userService.singInUser(request.toEntity());
+        return new ResponseEntity(BaseResponse.of(HttpStatus.CREATED), HttpStatus.CREATED);
     }
 
     @Auth
     @PostMapping(path= "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ApiOperation(value="사진등록 API", notes="유저 사진등록 api", authorizations = @Authorization(value = "Bearer +accessToken"))
+    @ApiOperation(value="사진등록 API", notes="유저 사진등록 api, 사진 등록 후 얼굴인식서버 전송합니다", authorizations = @Authorization(value = "Bearer +accessToken"))
     public ResponseEntity userFaceImages(@RequestParam("file") List<MultipartFile> images) throws IOException {
-        List<FaceImageDTO> result = userService.saveImages(images).stream()
+        List<FaceImageDTO> result = faceImageService.saveImagesAndSendToFaceServerForTrain(images).stream()
                 .map(FaceImageDTO::new)
                 .collect(Collectors.toList());
 
@@ -64,7 +71,7 @@ public class UserController {
     @GetMapping(path="/image")
     @ApiOperation(value="저장되어있는 사진의 url을 반환합니다", authorizations = @Authorization(value = "Bearer +accessToken"))
     public ResponseEntity userFaceImageList(){
-        List<FaceImageDTO> result = userService.saveImages(new ArrayList<>()).stream()
+        List<FaceImageDTO> result = faceImageService.saveImages(new ArrayList<>()).stream()
                 .map(FaceImageDTO::new)
                 .collect(Collectors.toList());
 
@@ -75,7 +82,7 @@ public class UserController {
     @DeleteMapping(path="/image")
     @ApiOperation(value="저장된 사진 삭제, 사진 id 주시면 됩니다", authorizations = @Authorization(value="Bearer +accessToken"))
     public ResponseEntity faceImageDelete(@RequestParam Long imageId){
-        userService.deleteImage(imageId);
+        faceImageService.deleteImage(imageId);
         return new ResponseEntity(BaseResponse.of(HttpStatus.OK), HttpStatus.OK);
     }
 }

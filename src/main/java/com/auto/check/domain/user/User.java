@@ -1,6 +1,7 @@
 package com.auto.check.domain.user;
 
 import com.auto.check.domain.DefaultEntity;
+import com.auto.check.domain.face.FaceImage;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -11,11 +12,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
 @Table(name="user")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @NoArgsConstructor
 public class User extends DefaultEntity {
@@ -29,21 +31,19 @@ public class User extends DefaultEntity {
     @Column(name="school_number")
     private String schoolNumber;
 
-    @ApiModelProperty(hidden = true)
-    @Column(name="img_path")
-    private String imgPath;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FaceImage> faceImages = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name="user_type")
     private UserType userType;
 
     @Builder
-    public User(String account, String password, String name, String schoolNumber, String imgPath, UserType userType) {
+    public User(String account, String password, String name, String schoolNumber, UserType userType) {
         this.account = account;
         this.password = password;
         this.name = name;
         this.schoolNumber = schoolNumber;
-        this.imgPath = imgPath;
         this.userType = userType;
     }
 
