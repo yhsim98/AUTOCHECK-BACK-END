@@ -20,9 +20,9 @@ public class LectureInfoCreateRequestDTO {
     private String lectureRoom;
     private String dayOfWeek;
     @JsonFormat(pattern = "HH:mm:ss")
-    private Time lectureStart;
+    private String lectureStart;
     @JsonFormat(pattern = "HH:mm:ss")
-    private Time lectureEnd;
+    private String lectureEnd;
 
     public LectureInfo toEntity(Lecture lecture){
         return LectureInfo.builder()

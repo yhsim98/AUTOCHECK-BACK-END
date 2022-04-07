@@ -1,7 +1,7 @@
-package com.auto.check.domain.registration;
+package com.auto.check.domain.studentlecture;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RegistrationRepository extends JpaRepository<Registration, Long> {
+public interface StudentLectureRepository extends JpaRepository<StudentLecture, Long> {
     int countByStudentIdAndLectureId(Long studentId, Long lectureId);
 }

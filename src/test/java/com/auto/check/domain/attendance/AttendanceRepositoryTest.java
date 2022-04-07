@@ -110,7 +110,7 @@ public class AttendanceRepositoryTest {
                         .lecture(lecture)
                         .lectureRoom(new LectureRoom("asd", "asd"))
                         .lectureTime(LectureTime.builder()
-                                .lecture_end(new Time(1)).lecture_start(new Time(1)).day_of_week("1").build())
+                                .lecture_end("11:11:11").lecture_start("11:11:11").day_of_week("1").build())
                 .build());
     }
 

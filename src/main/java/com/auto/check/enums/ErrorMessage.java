@@ -21,13 +21,16 @@ public enum ErrorMessage {
     LECTURE_NOT_EXIST(101, "존재하지 않는 강의입니다"),
 
     // registration
-    ALREADY_REGISTRATION(500, "이미 수강되어 있습니다"),
+    ALREADY_REGISTRATION(800, "이미 수강되어 있습니다"),
     
     //file
     FILE_UPLOAD_FAIL(1000, "파일 s3 업로드 실패"),
     
     //image
-    IMAGE_NOT_EXIST(1500, "이미지가 존재하지 않습니다")
+    IMAGE_NOT_EXIST(1500, "이미지가 존재하지 않습니다"),
+    
+    //face recognition server
+    FACE_SERVER_EXCEPTION(2001, "얼굴인식서버 api 호출 실패")
     ;
 
     Integer code;

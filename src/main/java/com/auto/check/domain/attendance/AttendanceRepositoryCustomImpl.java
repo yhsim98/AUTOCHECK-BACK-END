@@ -3,6 +3,7 @@ package com.auto.check.domain.attendance;
 import com.auto.check.domain.lectureinfo.LectureInfo;
 import com.auto.check.domain.lectureinfo.QLectureInfo;
 import com.auto.check.domain.user.QUser;
+import com.auto.check.domain.user.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -34,5 +35,14 @@ public class AttendanceRepositoryCustomImpl implements AttendanceRepositoryCusto
                 .where(attendance.week.eq(week))
                 .where(attendance.lectureInfo.id.eq(li.getId()))
                 .fetch();
+    }
+
+    @Override
+    public void updateAttendancesByLectureInfoAndWeek(List<User> students, LectureInfo lectureInfo, int week) {
+        queryFactory.update(attendance)
+                .set(attendance.isAttend, (short)1)
+                .where(attendance.user.in(students))
+                .where(attendance.lectureInfo.eq(lectureInfo))
+                .where(attendance.week.eq(week));
     }
 }

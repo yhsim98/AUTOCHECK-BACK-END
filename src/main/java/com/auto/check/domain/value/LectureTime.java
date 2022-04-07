@@ -14,11 +14,11 @@ import java.sql.Time;
 @EqualsAndHashCode
 public class LectureTime {
     private String day_of_week;
-    private Time lecture_start;
-    private Time lecture_end;
+    private String lecture_start;
+    private String lecture_end;
 
     @Builder
-    public LectureTime(Time lecture_start, String day_of_week, Time lecture_end) {
+    public LectureTime(String  lecture_start, String day_of_week, String lecture_end) {
         this.lecture_start = lecture_start;
         this.day_of_week = day_of_week;
         this.lecture_end = lecture_end;

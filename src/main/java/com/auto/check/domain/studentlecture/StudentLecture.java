@@ -1,4 +1,4 @@
-package com.auto.check.domain.registration;
+package com.auto.check.domain.studentlecture;
 
 import com.auto.check.domain.DefaultEntity;
 import com.auto.check.domain.lecture.Lecture;
@@ -13,8 +13,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Table(name="student_lecture")
-public class Registration extends DefaultEntity {
-
+public class StudentLecture extends DefaultEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User student;
@@ -24,7 +23,7 @@ public class Registration extends DefaultEntity {
     private Lecture lecture;
 
     @Builder
-    public Registration(User student, Lecture lecture) {
+    public StudentLecture(User student, Lecture lecture) {
         this.student = student;
         this.lecture = lecture;
     }

@@ -16,5 +16,9 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long>, A
     @Query("update Attendance a set a.isAttend=1 where a.user.id=:id")
     int bulkStudentAttendance(@Param("id") Long id);
 
+    @Modifying(clearAutomatically = true)
+    @Query("update Attendance a set a.isAttend=1 where a.user in :students and a.lectureInfo = :lectureInfo and a.week = :week")
+    void updateStudentsAttendance(List<User> students, LectureInfo lectureInfo, int week);
+
     List<Attendance> findByUserAndLectureInfoIn(User user, List<LectureInfo> lectureInfoList);
 }

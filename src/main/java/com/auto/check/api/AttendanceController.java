@@ -1,12 +1,14 @@
 package com.auto.check.api;
 
 import com.auto.check.annotaion.Auth;
+import com.auto.check.api.dto.PatchStudentAttendanceDTO;
 import com.auto.check.api.dto.StudentAttendanceResponse;
 import com.auto.check.api.dto.StudentLectureAttendanceResponse;
 import com.auto.check.api.response.BaseResponse;
 import com.auto.check.domain.attendance.Attendance;
 import com.auto.check.domain.lectureinfo.LectureInfo;
 import com.auto.check.service.AttendanceService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +61,7 @@ public class AttendanceController {
     @PatchMapping(value="/auto-check")
     @ApiOperation(value = "출석시작", notes="출석시작 API, lecture_info_id 와 week 를 받습니다. \n 강의시간이 아닌 경우 예외가 발생합니다", authorizations = @Authorization(value = "Bearer +accessToken"))
     public ResponseEntity startAutoCheck(@RequestParam Long lectureInfoId, @RequestParam int week){
+        attendanceService.startFaceCheck(lectureInfoId, week);
         return new ResponseEntity(BaseResponse.of(HttpStatus.OK), HttpStatus.OK);
     }
 
@@ -76,5 +79,12 @@ public class AttendanceController {
                 .collect(Collectors.toList());
 
         return new ResponseEntity(BaseResponse.of(result, HttpStatus.OK), HttpStatus.OK);
+    }
+
+    @PatchMapping(value="")
+    @ApiOperation(value="자동 출석체크 api", notes="")
+    public ResponseEntity patchStudentAttendance(PatchStudentAttendanceDTO request){
+        attendanceService.patchStudentsAttendance(request.getLectureInfoId(), request.getStudentsId(), request.getWeek());
+        return new ResponseEntity(BaseResponse.of(HttpStatus.CREATED), HttpStatus.CREATED);
     }
 }

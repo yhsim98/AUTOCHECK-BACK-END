@@ -37,7 +37,7 @@ public class LectureService {
 
     public List<LectureInfo> getLectureInfoList(Long lectureId) {
         Lecture lecture = getLectureById(lectureId);
-        lecture.getLectureInfoList().forEach(LectureInfo::getLectureTime);
+        lecture.getLectureInfoList().forEach(LectureInfo::getId);
         return lecture.getLectureInfoList();
     }
 

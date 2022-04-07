@@ -1,7 +1,7 @@
 package com.auto.check.domain.lecture;
 
 import com.auto.check.domain.lectureinfo.QLectureInfo;
-import com.auto.check.domain.registration.QRegistration;
+import com.auto.check.domain.studentlecture.QStudentLecture;
 import com.auto.check.domain.user.User;
 import com.querydsl.core.QueryFactory;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -11,7 +11,7 @@ import java.util.List;
 
 import static com.auto.check.domain.lecture.QLecture.*;
 import static com.auto.check.domain.lectureinfo.QLectureInfo.*;
-import static com.auto.check.domain.registration.QRegistration.*;
+import static com.auto.check.domain.studentlecture.QStudentLecture.studentLecture;
 import static com.auto.check.domain.user.QUser.*;
 
 @RequiredArgsConstructor
@@ -23,11 +23,11 @@ public class LectureRepositoryCustomImpl implements LectureRepositoryCustom{
     public List<Lecture> findUserLectureList(Long userId) {
         return queryFactory.selectFrom(lecture)
                 .distinct()
-                .innerJoin(registration)
-                .on(registration.lecture().eq(lecture))
+                .innerJoin(studentLecture)
+                .on(studentLecture.lecture().eq(lecture))
                 .innerJoin(lecture.lectureInfoList, lectureInfo)
                 .fetchJoin()
-                .where(registration.student().id.eq(userId))
+                .where(studentLecture.student().id.eq(userId))
                 .fetch();
     }
 

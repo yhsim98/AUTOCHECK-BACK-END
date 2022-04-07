@@ -1,36 +1,25 @@
 package com.auto.check.service;
 
-import com.auto.check.domain.face.FaceImage;
-import com.auto.check.domain.face.FaceImageRepository;
 import com.auto.check.domain.lecture.Lecture;
 import com.auto.check.domain.user.User;
 import com.auto.check.domain.user.UserRepository;
 import com.auto.check.enums.ErrorMessage;
 import com.auto.check.exception.NonCriticalException;
 
-import com.auto.check.service.dto.RequestImageTrainDTO;
 import com.auto.check.util.Jwt;
 import com.auto.check.api.dto.LoginRequestDTO;
-import com.auto.check.util.S3Util;
 import lombok.RequiredArgsConstructor;
-import org.apache.http.client.HttpClient;
 import org.mindrot.jbcrypt.BCrypt;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -89,7 +78,15 @@ public class UserService {
         return Long.valueOf(String.valueOf(jwt.getClaimsFromJwt(token).get("id")));
     }
 
-    public List<User> getLectureRelatedUserAndFaces(Lecture lecture){
-        return userRepository.findLectureRelatedUsersAndImages(lecture);
+    public List<User> getLectureRelatedUsers(Lecture lecture){
+        return userRepository.findLectureRelatedUsers(lecture);
+    }
+
+    public List<User> getUsersByIds(List<Long> ids){
+        return ids.stream()
+                .map(id->userRepository.findById(id))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 }

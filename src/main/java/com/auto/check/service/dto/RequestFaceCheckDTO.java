@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class RequestImageTrainDTO {
+public class RequestFaceCheckDTO {
     private Long lectureId;
     private List<Student> StudentList;
 
-    public RequestImageTrainDTO(Lecture lecture, List<User> students) {
+    public RequestFaceCheckDTO(Lecture lecture, List<User> students) {
         this.lectureId = lecture.getId();
         this.StudentList = students.stream()
                 .map(Student::new)
@@ -30,13 +30,13 @@ public class RequestImageTrainDTO {
     @Setter
     class Student{
         private Long studentId;
-        private List<String> url;
+        //private List<String> url;
 
         public Student(User student) {
             this.studentId = student.getId();
-            this.url = student.getFaceImages().stream()
-                    .map(FaceImage::getSavedUrl)
-                    .collect(Collectors.toList());
+//            this.url = student.getFaceImages().stream()
+//                    .map(FaceImage::getSavedUrl)
+//                    .collect(Collectors.toList());
         }
     }
 }

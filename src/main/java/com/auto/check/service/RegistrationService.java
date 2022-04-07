@@ -1,8 +1,8 @@
 package com.auto.check.service;
 
 import com.auto.check.domain.lecture.Lecture;
-import com.auto.check.domain.registration.Registration;
-import com.auto.check.domain.registration.RegistrationRepository;
+import com.auto.check.domain.studentlecture.StudentLecture;
+import com.auto.check.domain.studentlecture.StudentLectureRepository;
 import com.auto.check.domain.user.User;
 import com.auto.check.enums.ErrorMessage;
 import com.auto.check.exception.NonCriticalException;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class RegistrationService {
 
-    private final RegistrationRepository registrationRepository;
+    private final StudentLectureRepository registrationRepository;
 
     public boolean isRegistration(User user, Lecture lecture){
         if(registrationRepository.countByStudentIdAndLectureId(user.getId(), lecture.getId()) < 1)
@@ -25,13 +25,13 @@ public class RegistrationService {
     }
 
     @Transactional
-    public Registration singUpClass(User user, Lecture lecture) {
+    public StudentLecture singUpClass(User user, Lecture lecture) {
 
         if(isRegistration(user, lecture)){
             throw new NonCriticalException(ErrorMessage.ALREADY_REGISTRATION);
         }
 
-        return registrationRepository.save(Registration.builder()
+        return registrationRepository.save(StudentLecture.builder()
                 .lecture(lecture)
                 .student(user)
                 .build()

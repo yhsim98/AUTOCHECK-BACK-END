@@ -4,20 +4,16 @@ import com.auto.check.domain.face.FaceImage;
 import com.auto.check.domain.face.FaceImageRepository;
 import com.auto.check.domain.lecture.Lecture;
 import com.auto.check.domain.user.User;
-import com.auto.check.domain.user.UserRepository;
 import com.auto.check.enums.ErrorMessage;
 import com.auto.check.exception.NonCriticalException;
-import com.auto.check.service.dto.RequestImageTrainDTO;
+import com.auto.check.service.dto.RequestFaceCheckDTO;
 import com.auto.check.util.S3Util;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,15 +36,15 @@ public class FaceImageService {
 
         List<Lecture> lectures = lectureService.findUserLectureList();
 
-        List<RequestImageTrainDTO> requestData = lectures.stream()
-                .map(l->new RequestImageTrainDTO(l, userService.getLectureRelatedUserAndFaces(l)))
+        List<RequestFaceCheckDTO> requestData = lectures.stream()
+                .map(l->new RequestFaceCheckDTO(l, userService.getLectureRelatedUsers(l)))
                 .collect(Collectors.toList());
 
         webClient.mutate()
                 .baseUrl(faceServerAddress)
                 .build()
                 .post()
-                .uri("/train")
+                .uri("/face_recognition")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .bodyValue(requestData)
