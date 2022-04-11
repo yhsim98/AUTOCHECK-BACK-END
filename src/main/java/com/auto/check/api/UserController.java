@@ -50,33 +50,4 @@ public class UserController {
         return new ResponseEntity(BaseResponse.of(HttpStatus.CREATED), HttpStatus.CREATED);
     }
 
-    @Auth
-    @PostMapping(path= "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ApiOperation(value="사진등록 API", notes="유저 사진등록 api, 사진 등록 후 얼굴인식서버 전송합니다", authorizations = @Authorization(value = "Bearer +accessToken"))
-    public ResponseEntity userFaceImages(@RequestParam("file") List<MultipartFile> images) throws IOException {
-        List<FaceImageDTO> result = faceImageService.saveImagesAndSendToFaceServerForTrain(images).stream()
-                .map(FaceImageDTO::new)
-                .collect(Collectors.toList());
-
-        return new ResponseEntity(BaseResponse.of(result, HttpStatus.CREATED), HttpStatus.CREATED);
-    }
-
-    @Auth
-    @GetMapping(path="/image")
-    @ApiOperation(value="저장되어있는 사진의 url을 반환합니다", authorizations = @Authorization(value = "Bearer +accessToken"))
-    public ResponseEntity userFaceImageList(){
-        List<FaceImageDTO> result = faceImageService.saveImages(new ArrayList<>()).stream()
-                .map(FaceImageDTO::new)
-                .collect(Collectors.toList());
-
-        return new ResponseEntity(BaseResponse.of(result, HttpStatus.OK), HttpStatus.OK);
-    }
-
-    @Auth
-    @DeleteMapping(path="/image")
-    @ApiOperation(value="저장된 사진 삭제, 사진 id 주시면 됩니다", authorizations = @Authorization(value="Bearer +accessToken"))
-    public ResponseEntity faceImageDelete(@RequestParam Long imageId){
-        faceImageService.deleteImage(imageId);
-        return new ResponseEntity(BaseResponse.of(HttpStatus.OK), HttpStatus.OK);
-    }
 }
