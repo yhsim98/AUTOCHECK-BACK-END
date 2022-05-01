@@ -8,6 +8,7 @@ import com.auto.check.api.response.BaseResponse;
 import com.auto.check.domain.attendance.Attendance;
 import com.auto.check.domain.lectureinfo.LectureInfo;
 import com.auto.check.service.AttendanceService;
+import com.auto.check.service.dto.FaceCheckResponseDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
@@ -87,4 +88,5 @@ public class AttendanceController {
         attendanceService.patchStudentsAttendance(request.getLectureInfoId(), request.getStudentsId(), request.getWeek());
         return new ResponseEntity(BaseResponse.of(HttpStatus.CREATED), HttpStatus.CREATED);
     }
+
 }

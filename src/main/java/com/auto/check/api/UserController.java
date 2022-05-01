@@ -5,7 +5,6 @@ import com.auto.check.api.dto.FaceImageDTO;
 import com.auto.check.api.dto.SignInRequestDTO;
 import com.auto.check.api.dto.UserDTO;
 import com.auto.check.api.response.BaseResponse;
-import com.auto.check.service.FaceImageService;
 import com.auto.check.service.UserService;
 import com.auto.check.api.dto.LoginRequestDTO;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +27,7 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserService userService;
-    private final FaceImageService faceImageService;
+    //private final FaceImageService faceImageService;
 
     @PostMapping("/login")
     @ApiOperation(value="로그인 요청", notes="로그인 요청하는 api, 문제없다면 token 반환")

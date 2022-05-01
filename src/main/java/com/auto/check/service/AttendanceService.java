@@ -40,8 +40,8 @@ public class AttendanceService {
     public void startFaceCheck(Long lectureInfoId, int week) {
         LectureInfo lectureInfo = lectureService.getLectureInfoById(lectureInfoId);
 
-        RequestFaceCheckDTO requestFaceCheckDTO = new RequestFaceCheckDTO(lectureInfo.getLecture()
-                , userService.getLectureRelatedUsers(lectureInfo.getLecture()));
+        RequestFaceCheckDTO requestFaceCheckDTO = new RequestFaceCheckDTO(lectureInfo.getLecture(), lectureInfoId
+                , userService.getLectureRelatedUsers(lectureInfo.getLecture()), week);
 
         List<Long> studentList = webClient.mutate()
                 .baseUrl(faceServerAddress)
@@ -59,7 +59,7 @@ public class AttendanceService {
                 .orElseThrow(() -> new NonCriticalException(ErrorMessage.FACE_SERVER_EXCEPTION))
                 .getStudentList();
 
-        patchStudentsAttendance(lectureInfoId, studentList, week);
+        //this.patchStudentsAttendance(lectureInfoId, studentList, week);
     }
 
     public void alterStudentAttendance(Long attendanceId) {

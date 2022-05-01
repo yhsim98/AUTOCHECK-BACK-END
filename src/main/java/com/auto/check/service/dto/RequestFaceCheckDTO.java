@@ -2,6 +2,7 @@ package com.auto.check.service.dto;
 
 import com.auto.check.domain.face.FaceImage;
 import com.auto.check.domain.lecture.Lecture;
+import com.auto.check.domain.lectureinfo.LectureInfo;
 import com.auto.check.domain.user.User;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -16,13 +17,17 @@ import java.util.stream.Collectors;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class RequestFaceCheckDTO {
     private Long lectureId;
-    private List<Student> StudentList;
+    private Long lectureInfoId;
+    private int week;
+    private List<Student> studentList;
 
-    public RequestFaceCheckDTO(Lecture lecture, List<User> students) {
+    public RequestFaceCheckDTO(Lecture lecture, Long lectureInfoId, List<User> students, int week) {
         this.lectureId = lecture.getId();
-        this.StudentList = students.stream()
+        this.lectureInfoId = lectureInfoId;
+        this.studentList = students.stream()
                 .map(Student::new)
                 .collect(Collectors.toList());
+        this.week = week;
     }
 
     @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
