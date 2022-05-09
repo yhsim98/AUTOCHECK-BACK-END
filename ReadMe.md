@@ -3,6 +3,9 @@
 
 CCTV를 이용하여 강의실에 들어오는 학생들의 얼굴을 인식한 후 자동으로 출석을 해줍니다.
 
+## 사용 기술
+JAVA, SpringBoot, Spring Data JPA, QueryDSL, Mysql, Nginx, EC2, Route53, cerbot
+
 [시연영상](https://www.youtube.com/watch?app=desktop&v=ElOHh9--eBA)
 
 
