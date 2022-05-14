@@ -37,10 +37,8 @@ public class AttendanceService {
     @Value("${face-server.address}")
     private String faceServerAddress;
 
-    public void startFaceCheck(Long lectureInfoId, int week) {
-        LectureInfo lectureInfo = lectureService.getLectureInfoById(lectureInfoId);
-
-        RequestFaceCheckDTO requestFaceCheckDTO = new RequestFaceCheckDTO(lectureInfo.getLecture(), lectureInfoId
+    public void startFaceCheck(LectureInfo lectureInfo, int week) {
+        RequestFaceCheckDTO requestFaceCheckDTO = new RequestFaceCheckDTO(lectureInfo.getLecture(), lectureInfo.getId()
                 , userService.getLectureRelatedUsers(lectureInfo.getLecture()), week);
 
         List<Long> studentList = webClient.mutate()

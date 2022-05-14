@@ -15,7 +15,7 @@
 	<name>check</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>8</java.version>
 		<!-- 테스트 버전 -->
 		<junit.version>4.12</junit.version>
 	</properties>

@@ -6,6 +6,7 @@ import com.auto.check.domain.lectureinfo.LectureInfo;
 import com.auto.check.domain.lectureinfo.LectureInfoRepository;
 import com.auto.check.domain.user.User;
 import com.auto.check.domain.user.UserType;
+import com.auto.check.domain.value.LectureTime;
 import com.auto.check.enums.ErrorMessage;
 import com.auto.check.exception.NonCriticalException;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class LectureService {
     private final UserService userService;
     private final LectureRepository lectureRepository;
     private final LectureInfoRepository lectureInfoRepository;
+
 
     public List<Lecture> findUserLectureList() {
         User user = userService.getLoginUserInfo();
@@ -55,7 +57,6 @@ public class LectureService {
         return lecture;
     }
 
-
     public Lecture getLectureById(Long lectureId){
         return lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new NonCriticalException(ErrorMessage.LECTURE_NOT_EXIST));
@@ -65,4 +66,15 @@ public class LectureService {
         return lectureInfoRepository.findById(lectureInfoId)
                 .orElseThrow(()->new NonCriticalException(ErrorMessage.LECTURE_NOT_EXIST));
     }
+
+    public List<LectureInfo> getStartLectureInfoList(String time, String dayOfWeek){
+        LectureTime lectureTime = LectureTime.builder()
+                .day_of_week(dayOfWeek)
+                .lecture_start(time)
+                .build();
+
+        return lectureInfoRepository.findLectureInfoByLectureTime(lectureTime);
+    }
+
+
 }

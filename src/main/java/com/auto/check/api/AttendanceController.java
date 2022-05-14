@@ -57,14 +57,14 @@ public class AttendanceController {
 
         return new ResponseEntity(BaseResponse.of(result, HttpStatus.OK), HttpStatus.OK);
     }
-
+/*
     @Auth
     @PatchMapping(value="/auto-check")
     @ApiOperation(value = "출석시작", notes="출석시작 API, lecture_info_id 와 week 를 받습니다. \n 강의시간이 아닌 경우 예외가 발생합니다", authorizations = @Authorization(value = "Bearer +accessToken"))
     public ResponseEntity startAutoCheck(@RequestParam Long lectureInfoId, @RequestParam int week){
         attendanceService.startFaceCheck(lectureInfoId, week);
         return new ResponseEntity(BaseResponse.of(HttpStatus.OK), HttpStatus.OK);
-    }
+    }*/
 
     // 특정 강의의 출석여부 조회
     @Auth
