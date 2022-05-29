@@ -37,7 +37,11 @@ public class AttendanceService {
     @Value("${face-server.address}")
     private String faceServerAddress;
 
-    public void startFaceCheck(LectureInfo lectureInfo, int week) {
+    public void startFaceCheck(Long lectureInfoId, int week){
+        requestFaceCheck(lectureService.getLectureInfoById(lectureInfoId), week);
+    }
+
+    public void requestFaceCheck(LectureInfo lectureInfo, int week) {
         RequestFaceCheckDTO requestFaceCheckDTO = new RequestFaceCheckDTO(lectureInfo.getLecture(), lectureInfo.getId()
                 , userService.getLectureRelatedUsers(lectureInfo.getLecture()), week);
 
@@ -102,9 +106,11 @@ public class AttendanceService {
     }
 
     public void patchStudentsAttendance(Long lectureInfoId, List<Long> studentsId, int week){
+        if(studentsId == null){
+            return;
+        }
         LectureInfo lectureInfo = lectureService.getLectureInfoById(lectureInfoId);
         List<User> students = userService.getUsersByIds(studentsId);
-        //attendanceRepository.updateAttendancesByLectureInfoAndWeek(students, lectureInfo, week);
         attendanceRepository.updateStudentsAttendance(students, lectureInfo, week);
     }
 }

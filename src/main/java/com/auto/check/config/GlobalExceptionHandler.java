@@ -18,11 +18,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<BaseException> defaultException(Throwable e, HandlerMethod handlerMethod) throws IOException {
         BaseException baseException = null;
 
-        if (e instanceof NonCriticalException){
-            ((NonCriticalException) e).setErrorTrace(e.getStackTrace()[0].toString());
-            baseException = (NonCriticalException) e;
-        }
-
         if(baseException == null){
             baseException = new BaseException(e.getClass().getSimpleName(), ErrorMessage.UNDEFINED_EXCEPTION);
             baseException.setErrorMessage(e.getMessage());

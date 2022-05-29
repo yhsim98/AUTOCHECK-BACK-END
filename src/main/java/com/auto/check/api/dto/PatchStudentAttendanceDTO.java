@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -12,5 +13,5 @@ import java.util.List;
 public class PatchStudentAttendanceDTO {
     Long lectureInfoId;
     int week;
-    List<Long> studentsId;
+    List<Long> studentsId = new ArrayList<>();
 }

@@ -19,13 +19,13 @@ public class RequestFaceCheckDTO {
     private Long lectureId;
     private Long lectureInfoId;
     private int week;
-    private List<Student> studentList;
+    private List<Long> studentList;
 
     public RequestFaceCheckDTO(Lecture lecture, Long lectureInfoId, List<User> students, int week) {
         this.lectureId = lecture.getId();
         this.lectureInfoId = lectureInfoId;
         this.studentList = students.stream()
-                .map(Student::new)
+                .map(User::getId)
                 .collect(Collectors.toList());
         this.week = week;
     }

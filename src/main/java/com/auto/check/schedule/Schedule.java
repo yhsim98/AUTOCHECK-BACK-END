@@ -33,7 +33,7 @@ public class Schedule {
        List<LectureInfo> lectureInfoList = lectureService.getStartLectureInfoList(currentTime, dayOfWeek);
 
         lectureInfoList.parallelStream()
-                .forEach(id->{attendanceService.startFaceCheck(id, week);});
+                .forEach(id->{attendanceService.requestFaceCheck(id, week);});
 
     }
 
