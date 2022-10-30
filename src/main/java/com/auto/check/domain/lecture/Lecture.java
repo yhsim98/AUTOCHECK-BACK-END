@@ -8,6 +8,9 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ResultCheckStyle;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +18,8 @@ import java.util.List;
 
 @Getter
 @Entity
+@Where(clause = "is_deleted = false")
+@SQLDelete(sql = "UPDATE lecture SET is_deleted = true WHERE id = ?", check = ResultCheckStyle.COUNT)
 @Table(name="lecture")
 @NoArgsConstructor
 public class Lecture extends DefaultEntity {

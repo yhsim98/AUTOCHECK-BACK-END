@@ -5,12 +5,17 @@ import com.auto.check.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ResultCheckStyle;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
 @Getter
 @Entity
 @NoArgsConstructor
+@Where(clause = "is_deleted = false")
+@SQLDelete(sql = "UPDATE face_image SET is_deleted = true WHERE id = ?", check = ResultCheckStyle.COUNT)
 @Table(name="face_image")
 public class FaceImage extends DefaultEntity {
     private String savedUrl;

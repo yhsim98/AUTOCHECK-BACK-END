@@ -27,4 +27,7 @@ public abstract class DefaultEntity {
     @LastModifiedDate
     @ApiModelProperty(hidden = true)
     protected Timestamp modified_at;
+
+    @Column(name = "is_deleted")
+    protected Boolean isDeleted;
 }

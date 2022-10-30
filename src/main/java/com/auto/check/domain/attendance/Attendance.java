@@ -7,12 +7,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ResultCheckStyle;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
 @Getter
 @Entity
 @Table(name="attendance")
+@Where(clause = "is_deleted = false")
+@SQLDelete(sql = "UPDATE Attendance SET is_deleted = true WHERE id = ?", check = ResultCheckStyle.COUNT)
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Attendance extends DefaultEntity {
